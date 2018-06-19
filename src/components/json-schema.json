@@ -1,0 +1,179 @@
+{
+    "Keywords": [
+        "type",
+        "$schema",
+        "id"
+    ],
+    "types": {
+        "//": [
+            "If it’ s a string, it is the name of one of the basic types",
+            "If it is an array, it must be an array of strings, where each string is the name of one of the basic types, and each element is unique."
+        ],
+        "string": {
+            "allowed-properties": {
+                "minLength": {
+                    "type": "number"
+                },
+                "maxLength": {
+                    "type": "number"
+                },
+                "pattern": {
+                    "type": "string",
+                    "description": "Used to restrict a string to a particular regular expression."
+                },
+                "format": {
+                    "type": "string",
+                    "description": "allows for basic semantic validation on certain kinds of string values that are commonly used.",
+                    "built-in-formats": [{
+                            "date-time": "Date representation, as defined by RFC 3339, section 5.6."
+                        },
+                        {
+                            "email": "Internet email address, see RFC 5322, section 3.4.1."
+                        },
+                        {
+                            "hostname": "Internet host name, see RFC 1034, section 3.1."
+                        },
+                        {
+                            "ipv4": "IPv4 address, according to dotted-quad ABNF syntax as defined in RFC >   - 2673, section 3.2."
+                        },
+                        {
+                            "ipv6": "IPv6 address, as defined in RFC 2373, section 2.2."
+                        },
+                        {
+                            "uri": "A universal resource identifier (URI), according to RFC3986."
+                        }
+                    ]
+                }
+            }
+        },
+        "number": {
+            "allowed-properties": {
+                "multipleOf": {
+                    "type": "number"
+                },
+                "minimum": {
+                    "type": "number"
+                },
+                "exclusiveMinimum": {
+                    "type": "boolean"
+                },
+                "maximum": {
+                    "type": "number"
+                },
+                "exclusiveMaximum": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "object": {
+            "allowed-properties": {
+                "properties": {
+                    "type": "object",
+                    "description": "Is an object, where each key is the name of a property and each value is a JSON schema used to validate that property."
+                },
+                "additionalProperties": {
+                    "type": ["boolean", "object"],
+                    "default": true,
+                    "description": "Is used to control the handling of extra stuff, that is, properties whose names are not listed in the properties keyword. If additionalProperties is an object, that object is a schema that will be used to validate any additional properties not listed in properties."
+                },
+                "required": {
+                    "type": "array"
+                },
+                "minProperties": {
+                    "type": "number"
+                },
+                "maxProperties": {
+                    "type": "number"
+                },
+                "dependencies": {
+                    "type": "object",
+                    "description": "Allows the schema of the object to change based on the presence of certain special properties.",
+                    "examples": [{
+                            "//": "Property dependencies",
+                            "dependencies": {
+                                "credit_card": ["billing_address"]
+                            }
+                        },
+                        {
+                            "//": "Schema dependencies",
+                            "dependencies": {
+                                "credit_card": {
+                                    "properties": {
+                                        "billing_address": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "required": ["billing_address"]
+                                }
+                            }
+                        }
+                    ]
+                },
+                "patternProperties": {
+                    "type": "object",
+                    "description": "Match other property names via a regular expression."
+                }
+            }
+        },
+        "array": {
+            "allowed-properties": {
+                "items": {
+                    "type": ["array", "object"]
+
+                },
+                "additionalItems": {
+                    "type": "boolean"
+                },
+                "minItems": {
+                    "type": "number"
+                },
+                "maxItems": {
+                    "type": "number"
+                },
+                "uniqueItems": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "boolean": {
+            "enum": [
+                true,
+                false
+            ]
+        },
+        "null": null
+    },
+    "generic": {
+        "title": {
+            "type": "string"
+        },
+        "description": {
+            "type": "string"
+        },
+        "default": {
+            "type": "any"
+        },
+        "enum": {
+            "type": "array",
+            "description": "Used to restrict a value to a fixed set of values. It must be an array with at least one element, where each element is unique."
+        }
+    },
+    "advanced": {
+        "anyOf": {
+            "type": "array",
+            "description": "Must be valid against any of the subschemas"
+        },
+        "allOf": {
+            "type": "array",
+            "description": "Must be valid against all of the subschemas"
+        },
+        "oneOf": {
+            "type": "array",
+            "description": "Must be valid against exactly one of the subschemas"
+        },
+        "not": {
+            "type": "array",
+            "description": "Declares that a instance validates if it doesn't validate against the given subschema."
+        }
+    }
+}

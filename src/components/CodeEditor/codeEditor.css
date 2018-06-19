@@ -1,0 +1,10 @@
+.setLineDecoration {
+    background: lightblue;
+    width: 5px;
+    left: 3px;
+}
+.disposeLineDecoration {
+    background: white;
+    width: 5px;
+    left: 3px;
+}
