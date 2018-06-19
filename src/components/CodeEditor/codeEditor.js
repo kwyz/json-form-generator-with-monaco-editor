@@ -59,7 +59,7 @@ export default {
             })
             monEditor.revealLineInCenter(lineIndex)
 
-            // monEditor.focus();
+            monEditor.focus();
             this.hideEditor(true);
         },
     }
