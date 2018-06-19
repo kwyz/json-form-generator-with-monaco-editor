@@ -2,8 +2,11 @@ import * as monaco from '@timkendrick/monaco-editor';
 var monEditor;
 
 
-function monacoEditor(options, possition) {
-    monEditor = monaco.editor.create(document.getElementById('container'), options);
+function monacoEditor(editorOptions, possition) {
+    monEditor = monaco.editor.create(document.getElementById('container'), editorOptions);
+    // monEditor.onDidChangeModelContent(function (e) {
+    //     editorValue = monEditor.getValue();
+    // });
     monEditor.setPosition({
         column: 1,
         lineNumber: possition
@@ -11,7 +14,8 @@ function monacoEditor(options, possition) {
     return monEditor;
 }
 
-var options = {};
+
+var editorOptions = {};
 export default {
     name: "CodeEditor",
     props: {
@@ -29,7 +33,7 @@ export default {
             baseUrl: 'node_modules/@timkendrick/monaco-editor/dist/external',
         };
         document.getElementById('mainFrame').style.display = 'block';
-        options = {
+        editorOptions = {
             value: JSON.stringify(this.code, null, 4),
             language: this.language,
             folding: true,
@@ -40,19 +44,11 @@ export default {
             }
         };
 
-        this.editor = monacoEditor(options, 1);
-
-
+        this.editor = monacoEditor(editorOptions, 1);
     },
     methods: {
-        hideEditor(state) {
-            document.getElementById('mainFrame').style.display = state ? "block" : "none"
-        },
-
-
         goToLine(lineIndex) {
 
-            this.hideEditor(false);
             monEditor.setPosition({
                 column: 1,
                 lineNumber: lineIndex
@@ -60,7 +56,15 @@ export default {
             monEditor.revealLineInCenter(lineIndex)
 
             monEditor.focus();
-            this.hideEditor(true);
         },
-    }
+        getEditorValue() {
+            try{
+                JSON.parse(monEditor.getValue())
+            }catch(e){
+                return e
+            }
+            return JSON.parse(monEditor.getValue())
+        }
+    },
+
 }
