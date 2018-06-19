@@ -1,11 +1,39 @@
 <template>
-  <v-app class="no-overflow">
-    <v-flex offset-md3 xs6>
-      <v-btn color="success" @click="displayEditor">text</v-btn>
-      <code-editor :code=code :language=language></code-editor>
-      <json-viewer :data=code></json-viewer>
-
-    </v-flex>
+  <v-app class="overflow-hidden">
+    <v-container grid-list-md>
+      <v-layout>
+        <v-flex offset-xs5>
+          <h1 display-3>MONACO EDITOR</h1>
+        </v-flex>
+      </v-layout>
+      <v-layout row wrap>
+        <v-flex xs1 mt-5>
+          <v-btn color="success" mt-5 @click="displayEditor">Hide/Show</v-btn>
+        </v-flex>
+        <v-flex xs5 mt-5>
+          <code-editor :code=code :language=language></code-editor>
+        </v-flex>
+        <v-flex xs5 offset-xs1 mt-5>
+          <v-tabs v-model="active" color="white" dark slider-color="primary">
+            <v-tab class="black--text">
+              JsonTree
+            </v-tab>
+            <v-tab-item>
+              <v-card flat>
+                <json-viewer :data=code></json-viewer>
+              </v-card>
+            </v-tab-item>
+            <v-tab class="black--text">
+              FORM
+            </v-tab>
+            <v-tab-item>
+              <v-card flat>
+              </v-card>
+            </v-tab-item>
+          </v-tabs>
+        </v-flex>
+      </v-layout>
+    </v-container>
   </v-app>
 </template>
 
@@ -25,18 +53,8 @@ export default {
 
   data(){
       return {
-        show: false,
+        show: true,
 		language: "json",
-		schem:{
-  name: 'My Tree',
-  children: [
-    { name: 'hello' },
-    { name: 'wat' },
-    {name: 'child folder'}
-
-    
-  ]
-},
         code: {
 	"type": "team",
 	"test": {
@@ -110,7 +128,7 @@ export default {
     methods:{
         displayEditor: function(){
             this.show = !this.show;
-            CodeEditor.methods.disposeEditor(this.show)
+            CodeEditor.methods.hideEditor(this.show)
         }
     }
 }
