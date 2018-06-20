@@ -1,5 +1,6 @@
 import fileds from "./fields/"
 import rules from "./validation/rules";
+import CodeEditor from '../CodeEditor'
 
 export default {
     components: fileds,
@@ -29,6 +30,9 @@ export default {
         },
         changeLanguage() {
             this.currentLanguage = rules.methods.getCurrentLanguage();
+        },
+        triggerElement(elementId) {
+                CodeEditor.methods.goToWord(elementId)
         }
     }
 }

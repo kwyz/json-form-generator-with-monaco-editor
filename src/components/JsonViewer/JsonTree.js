@@ -1,4 +1,4 @@
-import CodeEditor from '../CodeEditor/codeEditor'
+import CodeEditor from '../CodeEditor'
 
 
 function parse(data, depth = 0, last = true, key = undefined) {
@@ -96,16 +96,10 @@ export default {
             if (n > 1) return `${n} items`
             return n ? '1 item' : 'no items'
         },
-        elementTrigger() {
+        elementTrigger(word) {
             this.expanded = !this.expanded;
-            var g = document.getElementsByClassName('json-tree-row');
-            for (var i = 0, len = g.length; i < len; i++) {
-                (function (index) {
-                    g[i].onclick = function () {
-                        CodeEditor.methods.goToLine((index + 1))
-                    }
-                })(i);
-
+            if (word != undefined) {
+                CodeEditor.methods.goToWord(word)
             }
         }
     },

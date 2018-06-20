@@ -47,20 +47,22 @@ export default {
         this.editor = monacoEditor(editorOptions, 1);
     },
     methods: {
-        goToLine(lineIndex) {
-
-            monEditor.setPosition({
-                column: 1,
-                lineNumber: lineIndex
-            })
-            monEditor.revealLineInCenter(lineIndex)
-
-            monEditor.focus();
+        goToWord(word) {
+            var matches = monEditor.getModel().findMatches(word);
+            if (matches.length != 0) {
+                var wordColumn = matches[0].range.startColumn;
+                var wordLine = matches[0].range.startLineNumber;
+                monEditor.setPosition({
+                    column: wordColumn,
+                    lineNumber: wordLine
+                })
+                monEditor.focus();
+            }
         },
         getEditorValue() {
-            try{
+            try {
                 JSON.parse(monEditor.getValue())
-            }catch(e){
+            } catch (e) {
                 return e
             }
             return JSON.parse(monEditor.getValue())

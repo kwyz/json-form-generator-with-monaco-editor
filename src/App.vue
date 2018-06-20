@@ -7,9 +7,6 @@
         </v-flex>
       </v-layout>
       <v-layout row wrap>
-        <v-flex xs10 mr-5 offset-xs1>
-          <v-btn large block color="primary" @click="realoadForm"> Reload Form</v-btn>
-        </v-flex>
         <v-flex xs5 offset-xs1>
           <code-editor :code=code :language=language></code-editor>
         </v-flex>
@@ -68,6 +65,7 @@ export default {
   "title": "MSign",
   "properties": {
     "email": {
+      "id": "email",
       "type": "string",
       "format": "email",
       "title": "Your email adress",
@@ -75,6 +73,7 @@ export default {
 
     },
     "idnp": {
+      "id": "idnp",
       "type": "string",
       "format": "idnp",
       "title": "Your identification number",
@@ -83,6 +82,7 @@ export default {
       "validation": "required|numeric|idnp:13|idnpValidate"
     },
     "dob": {
+      "id": "dob",
       "type": "string",
       "format": "date",
       "title": "Birth date"

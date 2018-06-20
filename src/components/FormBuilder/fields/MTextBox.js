@@ -1,4 +1,6 @@
 import rules from '../validation/rules'
+import FormBuilder from '../FormBuilder'
+
 export default {
     props: {
         schema: Object
@@ -23,6 +25,11 @@ export default {
         },
         getErrors() {
             return rules.methods.getComponentValidator(this.schema, this.model)
+        },
+        triggerElement(event) {
+            window.onclick = e => {
+                FormBuilder.methods.triggerElement(e.target.id);
+            }
         }
 
     }
