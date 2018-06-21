@@ -1,36 +1,38 @@
-import rules from '../validation/rules'
-import FormBuilder from '../FormBuilder'
+import rules from "../validation/rules";
+import FormBuilder from "../FormBuilder";
 
 export default {
     props: {
-        schema: Object
+        schema: Object,
+        jsonPath: Array,
+        Index: Number,
     },
     beforeMount() {
-        if (!this.schema.title) this.schema.title = "missing title"
+        if (!this.schema.title) this.schema.title = "missing title";
     },
-    mounted() {
-        //
-    },
+
     data() {
         return {
-            model: "",
+            index: ""
+        };
+    },
+    computed: {
+        getIndex: function () {
+            return this.index
         }
     },
-    methods: {
-        clearModel() {
-            this.model = null
-        },
-        clearErrors() {
-            this.errors = []
-        },
-        getErrors() {
-            return rules.methods.getComponentValidator(this.schema, this.model)
-        },
-        triggerElement(event) {
-            window.onclick = e => {
-                FormBuilder.methods.triggerElement(e.target.id);
-            }
-        }
+    created: function () {
+        var elementIndex = FormBuilder.methods.manageElementCount("increment");
+        this.index = this.jsonPath[elementIndex];
 
+    },
+    methods: {
+        getElementIndex() {
+            console.log(FormBuilder.methods.manageElementCount("get"));
+        },
+        getElementJsonPath() {
+            console.log("Call getElementJsonPath");
+            FormBuilder.methods.manageElementCount("get");
+        }
     }
-}
+};

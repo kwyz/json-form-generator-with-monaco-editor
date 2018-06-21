@@ -1,19 +1,22 @@
 import fileds from "./fields/"
-import rules from "./validation/rules";
-import CodeEditor from '../CodeEditor'
+import FormBuilder from '../FormBuilder'
 
+var elementCount = -1;
 export default {
     components: fileds,
     props: {
         schema: Object,
+        jsonPath: Array
     },
     data() {
         return {
-            currentLanguage: "ro",
-        }
+            index: "0"
+        };
+    },
+    created(){
+            this.manageElementCount("object")
     },
     methods: {
-        build() {},
         getComponentName(schema) {
             if (!schema || !schema.type) return null
             switch (schema.type) {
@@ -25,14 +28,23 @@ export default {
                 case "array":
                     break
                 case "object":
-                    break
+                    return FormBuilder
             }
         },
-        changeLanguage() {
-            this.currentLanguage = rules.methods.getCurrentLanguage();
+        manageElementCount(mode) {
+            switch (mode) {
+                case "increment":
+                    return elementCount++;
+                case "object":
+                    return (elementCount ++);
+                case "get":
+                    return elementCount;
+                case "reset":
+                    elementCount = 0;
+            }
         },
-        triggerElement(elementId) {
-                CodeEditor.methods.goToWord(elementId)
+        getElementIndex(){
+            return elementCount
         }
     }
 }

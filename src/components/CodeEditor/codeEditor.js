@@ -1,12 +1,15 @@
 import * as monaco from '@timkendrick/monaco-editor';
+import FormBuilder from '../FormBuilder'
 var monEditor;
 
 
-function monacoEditor(editorOptions, possition) {
+function monacoEditor(editorOptions, possition, curentThis) {
+    var $this = curentThis;
     monEditor = monaco.editor.create(document.getElementById('container'), editorOptions);
-    // monEditor.onDidChangeModelContent(function (e) {
-    //     editorValue = monEditor.getValue();
-    // });
+    monEditor.onDidChangeModelContent(function (e) {
+        $this.$root.$options.components.App.methods.reloadForm()
+
+    });
     monEditor.setPosition({
         column: 1,
         lineNumber: possition
@@ -44,20 +47,24 @@ export default {
             }
         };
 
-        this.editor = monacoEditor(editorOptions, 1);
+        this.editor = monacoEditor(editorOptions, 1, this);
     },
     methods: {
         goToWord(word) {
+
+            var json = JSON.parse(monEditor.getValue());
+
             var matches = monEditor.getModel().findMatches(word);
-            if (matches.length != 0) {
-                var wordColumn = matches[0].range.startColumn;
-                var wordLine = matches[0].range.startLineNumber;
-                monEditor.setPosition({
-                    column: wordColumn,
-                    lineNumber: wordLine
-                })
-                monEditor.focus();
-            }
+            console.log(matches);
+            // if (matches.length != 0) {
+            //     var wordColumn = matches[0].range.startColumn;
+            //     var wordLine = matches[0].range.startLineNumber;
+            //     monEditor.setPosition({
+            //         column: wordColumn,
+            //         lineNumber: wordLine
+            //     })
+            //     monEditor.focus();
+            // }
         },
         getEditorValue() {
             try {

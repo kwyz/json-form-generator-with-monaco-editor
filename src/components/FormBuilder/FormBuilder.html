@@ -1,17 +1,13 @@
-<v-layout class="pa-3">
-    <v-flex >
-        <v-flex>
-            <v-btn block @click="changeLanguage()" color="primary" large> {{currentLanguage}}</v-btn>
-        </v-flex>
-        <v-card v-if="schema.type == 'object'">
-            <v-card-title primary-title>
-                <v-flex offset-xs1 xs10 py-3>
-                    <h3 class="headline mb-0">{{ schema.title }}</h3>
-                    <template v-for="key in Object.keys(schema.properties)">
-                        <component :is="getComponentName(schema.properties[key])" :schema="schema.properties[key]" />
-                    </template>
-                </v-flex>
-            </v-card-title>
-        </v-card>
-    </v-flex>
-</v-layout>
+<v-flex id="form-builder">
+    <v-card v-if="schema.type == 'object'" flat>
+        <v-card-title primary-title>
+            <v-flex ml-2 xs10>
+                <h3>{{ schema.title }}</h3>
+                <template v-for="key in Object.keys(schema.properties)">
+                    <component :is="getComponentName(schema.properties[key])" :schema="schema.properties[key]" :json-path="jsonPath" :Index="manageElementCount('get')" :data-json-path="getElementIndex"
+                    />
+                </template>
+            </v-flex>
+        </v-card-title>
+    </v-card>
+</v-flex>

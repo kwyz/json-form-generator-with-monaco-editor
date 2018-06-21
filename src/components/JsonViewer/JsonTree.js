@@ -66,9 +66,7 @@ export default {
         }
     },
     computed: {
-
         parsed() {
-
             if (this.kv) {
                 return this.kv
             }
