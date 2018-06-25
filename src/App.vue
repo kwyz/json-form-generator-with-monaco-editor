@@ -2,21 +2,26 @@
     <v-app class="overflow-hidden" style="background-color: #c9c9c9">
         <v-container grid-list-md>
             <v-layout>
-                <v-flex offset-xs1 xs10 class="text-md-center">
+                <v-flex xs12 class="text-md-center">
                     <h1 class="display-3">MONACO EDITOR</h1>
-                    <v-btn block @click="changeLanguage()" color="primary" large>{{currentLanguage}}</v-btn>
                 </v-flex>
             </v-layout>
             <v-layout row wrap>
-                <v-flex xs5 offset-xs1>
+                <v-flex xs1>
+                    <v-btn @click="changeLanguage()" color="primary">{{currentLanguage}}</v-btn>
+                </v-flex>
+            </v-layout>
+            <v-layout row wrap>
+                <v-flex xs6>
                     <code-editor :code=code :language=language></code-editor>
                 </v-flex>
-                <v-flex xs5>
-                    <v-tabs color="primary" dark slider-color="white">
+                <v-flex xs6>
+                    <v-tabs color="primary" dark slider-color="white" class="tab-item">
                         <v-tab>
                             JsonTree
                         </v-tab>
-                        <v-tab-item>
+                        <v-tab-item style="    overflow-y: scroll;
+    max-height: 650px;">
                             <v-card flat>
                                 <json-viewer :data=code></json-viewer>
                             </v-card>
@@ -24,10 +29,11 @@
                         <v-tab>
                             FORM
                         </v-tab>
-                        <v-tab-item>
+                        <v-tab-item style="    overflow-y: scroll;
+    max-height: 650px;">
                             <v-card flat>
                                 <template>
-                                    <form-builder :schema="code" :jsonPath="jsonPath"></form-builder>
+                                    <form-builder :schema=code v-model="code"></form-builder>
                                 </template>
                             </v-card>
                         </v-tab-item>
@@ -62,82 +68,59 @@ export default {
         language: "json",
         currentLanguage:"ro",
         jsonPath:[],
-        code: {
-            "type": "object",
-            "title": "MSign",
-            "properties": {
-                "email": {
-                    "id": "email",
-                    "type": "string",
-                    "format": "email",
-                    "title": "Your email adress",
-                    "validation": "required|email"
-                },
-                "idnp": {
-                    "id": "idnp",
-                    "type": "string",
-                    "format": "idnp",
-                    "title": "Your identification number",
-                    "minLength": 13,
-                    "maxLength": 13,
-                    "validation": "required|numeric|idnp:13|idnpValidate"
-                },
-                "dob": {
-                    "id": "dob",
-                    "type": "object",
-                    "title": "Birth date",
-                    "properties":{
-                        "email": {
-                            "id": "field1",
-                            "type": "string",
-                            "format": "email",
-                            "title": "First field",
-
-                            },
-                        "idnp": {
-                            "id": "idnp",
-                            "type": "string",
-                            "format": "idnp",
-                            "title": "Seccond field",
-                        },
-                    }
-                }
-            }
-        },
+        code: {},
     };    
 },
 created(){
-    this.generateJsonPaths(this.code);
+    this.code = {
+    "type": "object",
+    "title": "MSign",
+    "properties": {
+        "email": {
+            "type": "string",
+            "format": "email",
+            "title": "Your email adress",
+            "validation": "required|email",
+            "dataJsonPath": "$.properties.email"
+        },
+        "idnp": {
+            "type": "string",
+            "format": "idnp",
+            "title": "Your identification number",
+            "minLength": 13,
+            "maxLength": 13,
+            "validation": "required|numeric|idnp:13|idnpValidate",
+            "dataJsonPath": "$.properties.idnp"
+        },
+        "person": {
+            "type": "object",
+            "title": "Personal data",
+            "properties": {
+                "first_name": {
+                    "type": "string",
+                    "title": "First name",
+                    "dataJsonPath": "$.properties.person.properties.first_name"
+                },
+                "last_name": {
+                    "type": "string",
+                    "title": "Last Name",
+                    "dataJsonPath": "$.properties.person.properties.last_name"
+                }
+            }
+        }
+    }
+}
 },
   methods:{
     reloadForm(){
-        FormBuilder.methods.manageElementCount("reset");
         var jsonSchema = CodeEditor.methods.getEditorValue();
         if(!(jsonSchema instanceof Error)){
             this.code = jsonSchema
-            this.generateJsonPaths(jsonSchema)
         }
     },
     changeLanguage() {
         this.currentLanguage = rules.methods.getCurrentLanguage();
     },
-    generateJsonPaths: function(jsonSchema){
-        var jp = require('jsonpath');
-        var paths = jp.nodes(jsonSchema,"$..id");
-        var pathArray = []
-        for(var index = 0; index < paths.length; index++){
-            var elementPathArray = paths[index].path;
-            var elementPath = ""
-            for(var possition = 0; possition < elementPathArray.length; possition++){
-                elementPath += elementPathArray[possition]+".";
-            }
-            elementPath = elementPath.substring(0,elementPath.lastIndexOf(".id"))
-            if(elementPath!="$"){
-                pathArray.push(elementPath);
-            }
-        }
-        this.jsonPath = pathArray;
-    }
   },
   mounted(){
     var $this = this;

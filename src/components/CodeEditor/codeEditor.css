@@ -4,7 +4,9 @@
 h1{
     font-family: 'Roboto',
     sans-serif;
-    ;
+}
+#container{
+    height: 700px;
 }
 
 .monaco-editor .margin-view-overlays .folding {

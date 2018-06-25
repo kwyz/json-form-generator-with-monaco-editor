@@ -1,62 +1,46 @@
+@import url('https://fonts.googleapis.com/css?family=Roboto');
 .json-tree {
     color: #394359;
-    display: flex;
-    flex-direction: column;
-    font-family: Menlo, Monaco, Consolas, monospace;
+    display: block;
+    flex-direction: row;
+    font-family: 'Roboto', sans-serif;
     font-size: 12px;
     line-height: 20px;
 }
 
-.json-tree-root {
-    background-color: #f7f8f9;
-    border-radius: 3px;
-    margin: 2px 0;
-    min-width: 560px;
-    padding: 10px;
+.json-tree-deeper {
+    overflow: scroll;
 }
 
 .json-tree-ending,
 .json-tree-row {
     border-radius: 2px;
     display: flex;
-}
-
-.json-tree-paired,
-.json-tree-row:hover {
-    background-color: #bce2ff;
+    overflow: hidden;
 }
 
 .json-tree-expando {
     cursor: pointer;
+    overflow: hidden;
 }
 
 .json-tree-sign {
     font-weight: 700;
-}
-
-.json-tree-collapsed {
-    color: gray;
-    font-style: italic;
-}
-
-.json-tree-value {
     overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
 }
 
-.json-tree-value-string {
-    color: #9aab3a;
+.outline-image {
+    background-repeat: no-repeat;
+    height: 20px;
+    width: 20px;
+}
+.outline-image-obj {
+    background-repeat: no-repeat;
+    height: 18px;
+    width: 20px;
 }
 
-.json-tree-value-boolean {
-    color: #ff0080;
-}
-
-.json-tree-value-number {
-    color: #4f7096;
-}
-
-.json-tree-value-null {
-    color: #c7444a;
+.tab-item{
+    overflow: scroll;
+    max-height: 650px;
 }

@@ -1,5 +1,5 @@
-<v-text-field :id="schema.id" :name="schema.title" :label="schema.title" :counter="schema.maxLength"
- required min="schema.minLength" max="schema.minLength" @click="getElementIndex" :data-json-path="getIndex" ></v-text-field>
+<v-text-field :id="schema.id" :name="schema.title" :label="schema.title" :rules="[validationRules]" :counter="schema.maxLength"
+ required min="schema.minLength" max="schema.minLength" @click="findByPath()" :data-json-path="dataJsonPath" v-model="model" ></v-text-field>
 
 
 

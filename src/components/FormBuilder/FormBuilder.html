@@ -1,11 +1,10 @@
 <v-flex id="form-builder">
-    <v-card v-if="schema.type == 'object'" flat>
+    <v-card v-if="schema.type == 'object'">
         <v-card-title primary-title>
-            <v-flex ml-2 xs10>
+            <v-flex xs12>
                 <h3>{{ schema.title }}</h3>
-                <template v-for="key in Object.keys(schema.properties)">
-                    <component :is="getComponentName(schema.properties[key])" :schema="schema.properties[key]" :json-path="jsonPath" :Index="manageElementCount('get')" :data-json-path="getElementIndex"
-                    />
+                <template  v-for="key in Object.keys(schema.properties)">
+                    <component :is="getComponentName(schema.properties[key])" :schema="schema.properties[key]" :jsonPath="schema.properties[key].dataJsonPath"/>
                 </template>
             </v-flex>
         </v-card-title>

@@ -1,4 +1,7 @@
 import CodeEditor from '../CodeEditor'
+import {
+    isBoolean
+} from 'util';
 
 
 function parse(data, depth = 0, last = true, key = undefined) {
@@ -20,7 +23,7 @@ function parse(data, depth = 0, last = true, key = undefined) {
         })
     } else if (Array.isArray(data)) {
         let value = data.map((item, index) => {
-            return parse(item, depth + 1, index === data.length - 1)
+            return parse(item, depth, index === data.length)
         })
         return Object.assign(kv, {
             primitive: false,
@@ -44,7 +47,6 @@ function parse(data, depth = 0, last = true, key = undefined) {
 
 export default {
     name: 'json-tree',
-
     props: {
         level: {
             type: Number,
@@ -63,6 +65,7 @@ export default {
         return {
             expanded: false,
             hovered: false,
+            schema: {}
         }
     },
     computed: {
@@ -76,6 +79,7 @@ export default {
                     result = JSON.parse(this.raw)
                 } else if (typeof this.data !== 'undefined') {
                     result = this.data
+                    this.schema = result;
                 } else {
                     result = '[Vue JSON Tree] No data passed.'
                     console.warn(result)
@@ -94,11 +98,24 @@ export default {
             if (n > 1) return `${n} items`
             return n ? '1 item' : 'no items'
         },
-        elementTrigger(word) {
-            this.expanded = !this.expanded;
-            if (word != undefined) {
-                CodeEditor.methods.goToWord(word)
+        recursiveGetJsonPath(schema) {
+            for (var index = 0; index < schema.value.length; index++) {
+                if (schema.value[index].value instanceof Array) {
+                    this.recursiveGetJsonPath(schema.value[index])
+                } else {
+                    if (schema.value[index].value.includes("$") && (schema.value[index].value != undefined)) {
+                        return schema.value[index].value
+                    }
+                }
             }
+            return false;
+        },
+        findByPath(schema) {
+            var jsonPath = this.recursiveGetJsonPath(schema);
+            if (!isBoolean(jsonPath)) {
+                CodeEditor.methods.findByPath(jsonPath);
+            };
+            this.expanded = !this.expanded;
         }
     },
 

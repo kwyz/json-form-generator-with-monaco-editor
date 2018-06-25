@@ -1,24 +1,15 @@
 import * as monaco from '@timkendrick/monaco-editor';
-import FormBuilder from '../FormBuilder'
-var monEditor;
 
+var monacoEditorInstance;
 
-function monacoEditor(editorOptions, possition, curentThis) {
-    var $this = curentThis;
-    monEditor = monaco.editor.create(document.getElementById('container'), editorOptions);
-    monEditor.onDidChangeModelContent(function (e) {
-        $this.$root.$options.components.App.methods.reloadForm()
-
-    });
-    monEditor.setPosition({
+function createMonacoEditor(editorOptions, possition) {
+    monacoEditorInstance = monaco.editor.create(document.getElementById('container'), editorOptions);
+    monacoEditorInstance.setPosition({
         column: 1,
         lineNumber: possition
     });
-    return monEditor;
+    return monacoEditorInstance;
 }
-
-
-var editorOptions = {};
 export default {
     name: "CodeEditor",
     props: {
@@ -35,45 +26,45 @@ export default {
         window.MonacoEnvironment = {
             baseUrl: 'node_modules/@timkendrick/monaco-editor/dist/external',
         };
-        document.getElementById('mainFrame').style.display = 'block';
-        editorOptions = {
+        var editorOptions = {
             value: JSON.stringify(this.code, null, 4),
             language: this.language,
             folding: true,
             theme: this.dark ? 'vs-dark' : 'vs',
-            colors: {
-                'editor.lineHighlightBackground': 'red',
-                'editor.selectionHighlightBackground': "red"
-            }
         };
-
-        this.editor = monacoEditor(editorOptions, 1, this);
+        this.editor = createMonacoEditor(editorOptions, 1);
     },
     methods: {
-        goToWord(word) {
+        findByPath(path) {
+            var matches = monacoEditorInstance.getModel().findMatches(path);
 
-            var json = JSON.parse(monEditor.getValue());
-
-            var matches = monEditor.getModel().findMatches(word);
-            console.log(matches);
-            // if (matches.length != 0) {
-            //     var wordColumn = matches[0].range.startColumn;
-            //     var wordLine = matches[0].range.startLineNumber;
-            //     monEditor.setPosition({
-            //         column: wordColumn,
-            //         lineNumber: wordLine
-            //     })
-            //     monEditor.focus();
-            // }
+            if (matches.length != 0) {
+                var startLine = matches[0].range.startLineNumber - 1;
+                var parentPosition = this.getParentPosition(monacoEditorInstance.getValue(position), startLine)
+                var position = {
+                    column: matches[0].range.startColumn - 1,
+                    lineNumber: parentPosition,
+                }
+                monacoEditorInstance.setPosition(position)
+                monacoEditorInstance.revealPositionInCenter(position);
+            }
+        },
+        getParentPosition(editorContent, linePosition) {
+            var line = "";
+            var splitedText = editorContent.split("\n");
+            while (!(line.includes('{'))) {
+                line = splitedText[linePosition - 2];
+                linePosition--;
+            }
+            return linePosition;
         },
         getEditorValue() {
             try {
-                JSON.parse(monEditor.getValue())
-            } catch (e) {
-                return e
+                JSON.parse(monacoEditorInstance.getValue())
+            } catch (exception) {
+                return exception
             }
-            return JSON.parse(monEditor.getValue())
+            return JSON.parse(monacoEditorInstance.getValue())
         }
     },
-
 }
