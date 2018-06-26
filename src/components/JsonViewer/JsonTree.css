@@ -1,4 +1,8 @@
 @import url('https://fonts.googleapis.com/css?family=Roboto');
+div:focus{
+    background-color: lightblue;
+}
+
 .json-tree {
     color: #394359;
     display: block;
@@ -36,7 +40,7 @@
 }
 .outline-image-obj {
     background-repeat: no-repeat;
-    height: 18px;
+    height: 17px;
     width: 20px;
 }
 

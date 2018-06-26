@@ -3,6 +3,7 @@ import {
     isBoolean
 } from 'util';
 
+var elementInstance;
 
 function parse(data, depth = 0, last = true, key = undefined) {
     let kv = {
@@ -43,8 +44,6 @@ function parse(data, depth = 0, last = true, key = undefined) {
     }
 }
 
-
-
 export default {
     name: 'json-tree',
     props: {
@@ -63,7 +62,7 @@ export default {
 
     data() {
         return {
-            expanded: false,
+            expanded: true,
             hovered: false,
             schema: {}
         }
@@ -103,7 +102,7 @@ export default {
                 if (schema.value[index].value instanceof Array) {
                     this.recursiveGetJsonPath(schema.value[index])
                 } else {
-                    if (schema.value[index].value.includes("$") && (schema.value[index].value != undefined)) {
+                    if ((schema.value[index].value != undefined) && schema.value[index].value.includes("$")) {
                         return schema.value[index].value
                     }
                 }
@@ -116,6 +115,44 @@ export default {
                 CodeEditor.methods.findByPath(jsonPath);
             };
             this.expanded = !this.expanded;
+        },
+
+        selectLineByValue(lineValue) {
+            if (elementInstance != undefined && elementInstance != null) {
+                elementInstance.style.backgroundColor = "white";
+            }
+            lineValue = lineValue.replace('"dataJsonPath":', '').replace(/\s/g, '').split(".");
+            for (var index = 1; index < lineValue.length; index++) {
+                var value = '"' + lineValue[index].replace('"', '') + '"';
+                elementInstance = this.getElemet(value)
+            }
+            elementInstance.style.backgroundColor = "lightblue"
+
+
+            this.expanded = true;
+
+        },
+        selectField(lineValue) {
+            lineValue = lineValue.split(':');
+            var elems = document.getElementsByTagName('input')
+            for (var index = 0; index < elems.length; index++) {
+                lineValue[1] = lineValue[1].replace(/"/g, '').replace(/\s/g, '');
+                if (elems[index].getAttribute('data-json-path') == lineValue[1]) {
+                    elems[index].focus();
+                }
+            }
+        },
+        getElemet(value) {
+            var doc = document.getElementsByClassName("jsontreekey");
+            var rows = document.getElementsByClassName("expandedButton");
+            for (var i in doc) {
+                var child = doc[i];
+                rows[i].click();
+                if (child.textContent == value) {
+                    child.scrollIntoView();
+                    return child
+                }
+            }
         }
     },
 

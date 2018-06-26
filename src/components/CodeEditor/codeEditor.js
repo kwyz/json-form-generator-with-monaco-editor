@@ -1,4 +1,5 @@
 import * as monaco from '@timkendrick/monaco-editor';
+import JsonTree from '../JsonViewer'
 
 var monacoEditorInstance;
 
@@ -8,8 +9,39 @@ function createMonacoEditor(editorOptions, possition) {
         column: 1,
         lineNumber: possition
     });
+    monacoEditorInstance.onDidChangeModelContent(function (e) {
+        if (monacoEditorInstance.getValue() == "") {
+            monacoEditorInstance.setValue("{}");
+        }
+    });
+    monacoEditorInstance.onDidChangeCursorPosition(function (e) {
+        var lineNumber = monacoEditorInstance.getPosition().lineNumber;
+        var lineValue = monacoEditorInstance.getModel().getLineContent(lineNumber);
+
+        while (!(lineValue.includes('{')) && !(lineValue.includes('dataJsonPath'))) {
+            lineNumber--;
+            lineValue = monacoEditorInstance.getModel().getLineContent(lineNumber)
+        }
+        while (!(lineValue.includes('dataJsonPath'))) {
+            lineNumber++;
+            lineValue = monacoEditorInstance.getModel().getLineContent(lineNumber)
+        }
+
+        JsonTree.methods.selectLineByValue(lineValue);
+        JsonTree.methods.selectField(lineValue);
+    });
+
     return monacoEditorInstance;
 }
+
+
+function calcMonacoEditorWidth() {
+    var width = document.body.clientWidth;
+    if (width > 768)
+        width = (Math.floor(width / 2) * 0.9) - 40;
+    return width;
+}
+
 export default {
     name: "CodeEditor",
     props: {
@@ -26,11 +58,20 @@ export default {
         window.MonacoEnvironment = {
             baseUrl: 'node_modules/@timkendrick/monaco-editor/dist/external',
         };
+
+        window.addEventListener("resize", function () {
+            calcMonacoEditorWidth();
+            monacoEditorInstance.layout({
+                width: calcMonacoEditorWidth(),
+                height: 700,
+            });
+        });
         var editorOptions = {
             value: JSON.stringify(this.code, null, 4),
             language: this.language,
             folding: true,
             theme: this.dark ? 'vs-dark' : 'vs',
+            scrollBeyondLastLine: false
         };
         this.editor = createMonacoEditor(editorOptions, 1);
     },
@@ -52,9 +93,11 @@ export default {
         getParentPosition(editorContent, linePosition) {
             var line = "";
             var splitedText = editorContent.split("\n");
-            while (!(line.includes('{'))) {
-                line = splitedText[linePosition - 2];
-                linePosition--;
+            if (line != undefined && line != null) {
+                while (!(line.includes('{'))) {
+                    line = splitedText[linePosition - 2];
+                    linePosition--;
+                }
             }
             return linePosition;
         },

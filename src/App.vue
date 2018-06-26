@@ -1,27 +1,26 @@
 <template>
     <v-app class="overflow-hidden" style="background-color: #c9c9c9">
-        <v-container grid-list-md>
+        <v-container grid-list>
             <v-layout>
-                <v-flex xs12 class="text-md-center">
+                <v-flex xs12 md12 sm12 class="text-xs-center">
                     <h1 class="display-3">MONACO EDITOR</h1>
                 </v-flex>
             </v-layout>
             <v-layout row wrap>
-                <v-flex xs1>
+                <v-flex md5 xs12 sm12 offset-xs5 offset-md0>
                     <v-btn @click="changeLanguage()" color="primary">{{currentLanguage}}</v-btn>
                 </v-flex>
             </v-layout>
             <v-layout row wrap>
-                <v-flex xs6>
-                    <code-editor :code=code :language=language></code-editor>
+                <v-flex md5 xs12 mb-5 pb-5 >
+                    <code-editor :code=code :language=language class="mb-4"></code-editor>
                 </v-flex>
-                <v-flex xs6>
-                    <v-tabs color="primary" dark slider-color="white" class="tab-item">
+                <v-flex md5 xs12 sm12 offset-xl2 offset-md2 >
+                    <v-tabs color="primary" dark slider-color="white">
                         <v-tab>
                             JsonTree
                         </v-tab>
-                        <v-tab-item style="    overflow-y: scroll;
-    max-height: 650px;">
+                        <v-tab-item style="overflow-y: scroll;max-height: 650px;">
                             <v-card flat>
                                 <json-viewer :data=code></json-viewer>
                             </v-card>
@@ -29,8 +28,7 @@
                         <v-tab>
                             FORM
                         </v-tab>
-                        <v-tab-item style="    overflow-y: scroll;
-    max-height: 650px;">
+                        <v-tab-item style="overflow-y: scroll;max-height: 650px;">
                             <v-card flat>
                                 <template>
                                     <form-builder :schema=code v-model="code"></form-builder>
@@ -112,12 +110,6 @@ created(){
 }
 },
   methods:{
-    reloadForm(){
-        var jsonSchema = CodeEditor.methods.getEditorValue();
-        if(!(jsonSchema instanceof Error)){
-            this.code = jsonSchema
-        }
-    },
     changeLanguage() {
         this.currentLanguage = rules.methods.getCurrentLanguage();
     },
@@ -125,7 +117,10 @@ created(){
   mounted(){
     var $this = this;
       window.addEventListener('keyup', function(ev) {
-        $this.reloadForm();
+        var jsonSchema = CodeEditor.methods.getEditorValue();
+        if(!(jsonSchema instanceof Error)){
+            $this.code = jsonSchema
+        }
     });
   }
 }
