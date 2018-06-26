@@ -13,7 +13,7 @@ export default {
     },
     methods: {
         getComponentName(schema) {
-            if (!schema || !schema.type) return ""
+            if (!schema || !schema.type) return null
             switch (schema.type) {
                 case "string":
                 case "number":

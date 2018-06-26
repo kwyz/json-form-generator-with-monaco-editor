@@ -16,19 +16,25 @@ function createMonacoEditor(editorOptions, possition) {
     });
     monacoEditorInstance.onDidChangeCursorPosition(function (e) {
         var lineNumber = monacoEditorInstance.getPosition().lineNumber;
-        var lineValue = monacoEditorInstance.getModel().getLineContent(lineNumber);
+        var lineValue = 0;
+        if (lineNumber != undefined && lineNumber != null)
+            lineValue = monacoEditorInstance.getModel().getLineContent(lineNumber);
 
         while (!(lineValue.includes('{')) && !(lineValue.includes('dataJsonPath'))) {
             lineNumber--;
-            lineValue = monacoEditorInstance.getModel().getLineContent(lineNumber)
+            if (lineNumber != undefined && lineNumber != null)
+                lineValue = monacoEditorInstance.getModel().getLineContent(lineNumber)
         }
         while (!(lineValue.includes('dataJsonPath'))) {
             lineNumber++;
-            lineValue = monacoEditorInstance.getModel().getLineContent(lineNumber)
+            if (lineNumber != undefined && lineNumber != null)
+                lineValue = monacoEditorInstance.getModel().getLineContent(lineNumber)
         }
 
-        JsonTree.methods.selectLineByValue(lineValue);
-        JsonTree.methods.selectField(lineValue);
+        if (lineValue != undefined && lineValue != null) {
+            JsonTree.methods.selectLineByValue(lineValue);
+            JsonTree.methods.selectField(lineValue);
+        }
     });
 
     return monacoEditorInstance;
@@ -37,7 +43,7 @@ function createMonacoEditor(editorOptions, possition) {
 
 function calcMonacoEditorWidth() {
     var width = document.body.clientWidth;
-    if (width > 768)
+    if (width > 1024)
         width = (Math.floor(width / 2) * 0.9) - 40;
     return width;
 }
@@ -78,7 +84,6 @@ export default {
     methods: {
         findByPath(path) {
             var matches = monacoEditorInstance.getModel().findMatches(path);
-
             if (matches.length != 0) {
                 var startLine = matches[0].range.startLineNumber - 1;
                 var parentPosition = this.getParentPosition(monacoEditorInstance.getValue(position), startLine)
@@ -99,7 +104,8 @@ export default {
                     linePosition--;
                 }
             }
-            return linePosition;
+            if (!(linePosition instanceof Error))
+                return linePosition;
         },
         getEditorValue() {
             try {
