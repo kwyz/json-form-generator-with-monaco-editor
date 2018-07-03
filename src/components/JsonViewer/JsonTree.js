@@ -96,6 +96,8 @@ export default {
             if (n > 1) return `${n} items`
             return n ? '1 item' : 'no items'
         },
+
+        // Function that return the json path of curent selected row from json tree
         recursiveGetJsonPath(schema) {
             for (var index = 0; index < schema.value.length; index++) {
                 if (schema.value[index].value instanceof Array) {
@@ -108,13 +110,14 @@ export default {
             }
             return false;
         },
+        // Function that call method from CodeEditor module for searching the parent of curent json path
         findByPath(schema) {
             var jsonPath = this.recursiveGetJsonPath(schema);
             if (!isBoolean(jsonPath)) {
                 CodeEditor.methods.findByPath(jsonPath);
             };
         },
-
+        // Function that highlight the current selected object from code editor in case if its find this line in json tree
         selectLineByValue(lineValue) {
             try {
                 if (elementInstance != undefined && elementInstance != null) {
@@ -127,13 +130,10 @@ export default {
                         elementInstance = this.getElemet(value)
                     }
                     elementInstance.style.backgroundColor = "lightblue"
-
-
                 }
-            } catch (e) {
-
-            }
+            } catch (e) {}
         },
+        // Function that highlight the current selected object from code editor in case if its find this object reference in FormBuidel      
         selectField(lineValue) {
             try {
                 lineValue = lineValue.split(':');
@@ -153,6 +153,7 @@ export default {
                 }
             } catch (e) {}
         },
+        // Function that scroll to the current selected element
         getElemet(value) {
             try {
                 var doc = document.getElementsByClassName("jsontreekey");
@@ -168,7 +169,7 @@ export default {
             } catch (e) {}
         }
     },
-
+    // Function that is call automatically when module is created to expand all json tree structure
     created() {
         this.expanded = true
     }

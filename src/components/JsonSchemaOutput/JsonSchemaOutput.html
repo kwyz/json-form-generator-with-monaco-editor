@@ -1,0 +1,14 @@
+<v-layout row wrap>
+    <v-flex xs12 class="text-xs-center">
+        <div id="schema-output">
+            <h3> {{schema.title}} </h3>
+        </div>
+        <div v-for="val in Object.values(model)">
+            <div v-for="key in Object.keys(val)">
+                <td v-if="key == 'name'">{{ val[key] }}
+                    <td v-if="key == 'value'">{{val[key]}}</td>
+                </td>
+            </div>
+        </div>
+    </v-flex>
+</v-layout>

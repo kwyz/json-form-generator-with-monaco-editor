@@ -1,6 +1,3 @@
-<v-text-field :id="schema.id" class="jsontreekey" :name="schema.title" :label="schema.title" :rules="[validationRules]" :counter="schema.maxLength"
- required min="schema.minLength" max="schema.minLength" @click="findByPath()" :data-json-path="dataJsonPath" v-model="model"
-></v-text-field>
-
-
-
+<v-text-field :id="schema.id" :name="schema.title" :label="schema.title" :rules="[validationRules]" :counter="schema.maxLength"
+    required min="schema.minLength" max="schema.minLength" @click="findByPath()" :data-json-path="dataJsonPath" v-model="model"
+    height=30></v-text-field>

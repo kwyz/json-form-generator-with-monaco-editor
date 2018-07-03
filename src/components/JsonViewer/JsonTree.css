@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css?family=Roboto');
+
 div:focus{
     background-color: lightblue;
 }
@@ -9,7 +10,6 @@ div:focus{
     flex-direction: row;
     font-family: 'Roboto', sans-serif;
     font-size: 12px;
-    line-height: 20px;
 }
 
 .json-tree-deeper {

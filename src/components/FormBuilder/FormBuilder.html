@@ -3,8 +3,18 @@
         <v-card-title primary-title>
             <v-flex xs12>
                 <h3>{{ schema.title }}</h3>
-                <template  v-for="key in Object.keys(schema.properties)">
-                    <component :is="getComponentName(schema.properties[key])" :schema="schema.properties[key]" :jsonPath="schema.properties[key].dataJsonPath"/>
+
+                <template v-for="key in Object.keys(schema.properties) ">
+                    <div v-if="schema.properties[key].type=='array'">
+                        <div v-for="elem in schema.properties[key].properties.items">
+                            <component :is="getComponentName(Object.values(elem)[0])" :schema="Object.values(elem)[0]" :jsonPath="Object.values(elem)[0].dataJsonPath"
+                            />
+                        </div>
+                    </div>
+                    <div v-if="schema.properties[key].type!='array'">
+                        <component :is=" getComponentName(schema.properties[key]) " :schema="schema.properties[key]
+                        " :jsonPath="schema.properties[key].dataJsonPath " />
+                    </div>
                 </template>
             </v-flex>
         </v-card-title>

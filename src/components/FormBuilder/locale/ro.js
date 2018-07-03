@@ -1,4 +1,5 @@
 'use strict';
+// This file have an single function that contain a bunch of keywords and error messages for romanian language
 module.exports = function localize_ro(errors) {
     if (!(errors && errors.length)) return;
     for (var i = 0; i < errors.length; i++) {
