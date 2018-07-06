@@ -28,10 +28,6 @@ div:focus{
     overflow: hidden;
 }
 
-.json-tree-sign {
-    font-weight: 700;
-    overflow: hidden;
-}
 
 .outline-image {
     background-repeat: no-repeat;
@@ -42,9 +38,4 @@ div:focus{
     background-repeat: no-repeat;
     height: 17px;
     width: 20px;
-}
-
-.tab-item{
-    overflow: scroll;
-    max-height: 650px;
 }

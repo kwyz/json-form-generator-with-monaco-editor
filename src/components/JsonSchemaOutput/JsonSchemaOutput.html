@@ -1,14 +1,8 @@
-<v-layout row wrap>
-    <v-flex xs12 class="text-xs-center">
-        <div id="schema-output">
-            <h3> {{schema.title}} </h3>
-        </div>
-        <div v-for="val in Object.values(model)">
-            <div v-for="key in Object.keys(val)">
-                <td v-if="key == 'name'">{{ val[key] }}
-                    <td v-if="key == 'value'">{{val[key]}}</td>
-                </td>
-            </div>
-        </div>
-    </v-flex>
-</v-layout>
+<div class="col">
+    <div class="col-xs-12 text-center">
+        <h4>{{ schema.title }}</h4>
+    </div>
+    <div class="text-center mt-5">
+        <img src="../../resources//under_work.png" style="height: 200px;" alt="Stil under working process">
+    </div>
+</div>

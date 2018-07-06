@@ -1,8 +1,6 @@
 import * as monaco from '@timkendrick/monaco-editor';
 import JsonTree from '../JsonViewer'
 
-
-
 //Global monaco editor instance
 var monacoEditorInstance;
 
@@ -118,29 +116,44 @@ export default {
 
         //Function that search an line in editor that correspond to selected element in form view or json-tree view
         findByPath(path) {
+            let pathElements = path.split(".");
+            pathElements.shift();
+            console.log(pathElements);
+            if (!path) {
+                console.warn("Cannot find element. Add 'dataJsonPath' property in json schema. Ex. 'dataJsonPath':'$.obj_name'")
+            } else {
+                let model = monacoEditorInstance.getValue();
+                let lastLineNumber = monacoEditorInstance.getModel().getLineCount();
+                for (let index = 0; index < pathElements.length; index++) {
+                    model = monaco.editor.createModel(model);
+                    var matches = model.findMatches(pathElements[index]);
+                    /** matches is array of range object, that contains 4 properties
+                     * 
+                     * @param startLineNumber { number } - start line number of searched item
+                     * @param startColumnNumber { number } - start column number of serached item
+                     * @param endLineNumber { number } - end line number of searched item 
+                     * @param startColumnNumber { number } - end column number if serached item
+                     */
+                    if (matches.length != 0) {
+                        console.log(matches[0].range);
 
-            var matches = monacoEditorInstance.getModel().findMatches(path);
-            /** matches is array of range object, that contains 4 properties
-             * 
-             * @param startLineNumber { number } - start line number of searched item
-             * @param startColumnNumber { number } - start column number if serached item
-             * @param endLineNumber { number } - end line number of searched item 
-             * @param startColumnNumber { number } - end column number if serached item
-             */
-            if (matches.length != 0) {
-                // If is fiind element in editor
-                //Get first match line number
-                var startLine = matches[0].range.startLineNumber - 1;
-                // Search for parent postion
-                var parentPosition = this.getParentPosition(monacoEditorInstance.getValue(position), startLine)
-                // Create new position object with parent position
-                var position = {
-                    column: matches[0].range.startColumn - 1,
-                    lineNumber: parentPosition,
+                        model = model.getValueInRange({
+                            startLineNumber: matches[0].range.startLineNumber,
+                            startColumn: matches[0].range.startColumn,
+                            endLineNumber: lastLineNumber,
+                            endColumn: 1
+                        })
+                        console.log(model);
+                    }
                 }
+                // Create new position object with parent position
+                // var position = {
+                //     column: matches[0].range.startColumn - 1,
+                //     lineNumber: parentPosition,
+                // }
                 //Set editor cursor on parent positon
-                monacoEditorInstance.setPosition(position)
-                monacoEditorInstance.revealPositionInCenter(position);
+                // monacoEditorInstance.setPosition(position)
+                // monacoEditorInstance.revealPositionInCenter(position);
             }
         },
         //Function that return parent position of received line number
@@ -163,6 +176,7 @@ export default {
         // Function that get entire monaco editor value and return it in JSON format
         getEditorValue() {
             try {
+
                 JSON.parse(monacoEditorInstance.getValue())
             } catch (exception) {
                 return exception

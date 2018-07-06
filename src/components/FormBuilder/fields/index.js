@@ -5,4 +5,5 @@ files.keys().forEach(key => {
     modules[key.replace(/(\.\/|\.vue)/g, "")] = files(key).default;
 });
 
+
 module.exports = modules;

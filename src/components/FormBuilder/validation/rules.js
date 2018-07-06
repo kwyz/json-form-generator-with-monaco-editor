@@ -26,8 +26,11 @@ String.prototype.capitalize = function () {
 export default {
     methods: {
         // Function that is designed for return and validation error messages for curent site language
-        getComponentValidator: function (schema, data) {
+        getComponentValidator: function (schema, data, isRequired) {
+            if (isRequired && data == "") return "*Acest câmp este obligatoriu!"
             if (!schema || !schema.type || data == "") return true;
+            if ((schema.type == "number" || schema.type == "integer") && !isNaN(parseInt(data)))
+                data = parseInt(data);
             var validate = ajv.compile(schema);
             var valid = validate(data);
             if (!valid) {

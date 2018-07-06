@@ -1,55 +1,43 @@
 <template>
-    <v-app class="overflow-hidden" style="background-color: #c9c9c9">
-        <v-container grid-list>
-            <v-layout>
-                <v-flex xs12 md12 sm12 class="text-xs-center">
-                    <h1 class="display-3">MONACO EDITOR</h1>
-                </v-flex>
-            </v-layout>
-            <v-layout row wrap>
-                <v-flex md5 xs12 sm12 offset-xs5 offset-md0>
-                    <v-btn @click="changeLanguage()" color="primary">{{currentLanguage}}</v-btn>
-                </v-flex>
-            </v-layout>
-            <v-layout row wrap>
-                <v-flex md5 xs12 mb-4 pb-2 pr-1>
+    <div style="background-color: #c9c9c9">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-xl-12">
+                    <h1 class="text-center">MONACO EDITOR</h1>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-1 offset-xs-2 offset-md-1 pl-0">
+                    <button type="button" class="btn btn-primary btn-sm btn-block mb-2" @click="changeLanguage()">{{currentLanguage.toUpperCase()}}</button>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-5 col-xs col-sm offset-md-1 pb-2 pr-1">
                     <code-editor :code=code :language=language></code-editor>
-                </v-flex>
-                <v-flex md5 xs12 sm12 offset-xl2 offset-md2>
-                    <v-tabs color="primary" dark slider-color="white">
-                        <v-tab>
-                            JsonTree
-                        </v-tab>
-                        <v-tab-item style="overflow-y: scroll;max-height: 650px;">
-                            <v-card flat>
-                                <json-viewer :data=code></json-viewer>
-                            </v-card>
-                        </v-tab-item>
-                        <v-tab>
-                            FORM
-                        </v-tab>
-                        <v-tab-item style="overflow-y: scroll;max-height: 650px;">
-                            <v-card flat>
-                                <template>
-                                    <form-builder :schema=code v-model="formContent"></form-builder>
-                                </template>
-                            </v-card>
-                        </v-tab-item>
-                        <v-tab>
-                            Output
-                        </v-tab>
-                        <v-tab-item style="overflow-y: scroll;max-height: 650px;">
-                            <v-card flat>
-                                <template>
-                                    <schema-output :schema=code :model="formContent"></schema-output>
-                                </template>
-                            </v-card>
-                        </v-tab-item>
-                    </v-tabs>
-                </v-flex>
-            </v-layout>
-        </v-container>
-    </v-app>
+                </div>
+                <div class="col-md-5 col-xs col-sm ml-2 ml-5 justify-content-center bg-white mb-2 pb-4" style="overflow-y: scroll; max-height: 690px;">
+                    <nav>
+                        <div class="nav justify-content-center nav-tabs bg-white" id="nav-tab" role="tablist">
+                            <a class="nav-item nav-link active" id="nav-code-tab" data-toggle="tab" href="#nav-code" role="tab" aria-controls="nav-code" aria-selected="true">JsonTree</a>
+                            <a class="nav-item nav-link" id="nav-form-tab" data-toggle="tab" href="#nav-form" role="tab" aria-controls="nav-form" aria-selected="false">Form</a>
+                            <a class="nav-item nav-link" id="nav-output-tab" data-toggle="tab" href="#nav-output" role="tab" aria-controls="nav-output" aria-selected="false">Output</a>
+                        </div>
+                    </nav>
+                    <div class="tab-content bg-white mt-2" id="nav-tabContent">
+                        <div class="tab-pane fade show active" id="nav-code" role="tabpanel" aria-labelledby="nav-code-tab">
+                            <json-viewer :data=code></json-viewer>
+                        </div>
+                        <div class="tab-pane fade" id="nav-form" role="tabpanel" aria-labelledby="nav-form-tab">
+                            <form-builder :schema=code></form-builder>
+                        </div>
+                        <div class="tab-pane fade" id="nav-output" role="tabpanel" aria-labelledby="nav-output-tab">
+                            <schema-output :schema=code></schema-output>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </template>
 
 <script>
@@ -58,6 +46,8 @@ import JsonViewer from './components/JsonViewer' // Import Json View component
 import FormBuilder from './components/FormBuilder' // Import Form Buider component
 import SchemaOutput from './components/JsonSchemaOutput' // Import SchemaOutput component
 import rules from "./components/FormBuilder/validation/rules"; // Import validation rules
+import jsonSchema from './resources/jsonSchema.js' // Import file that contains json schema
+import JsonPathGenerator from './components/JsonPathGenerator/index.js'
 
 
 export default {
@@ -79,69 +69,11 @@ export default {
         currentLanguage:"ro",
         jsonPath:[],
         code: {},
-        formContent:[],
     };    
 },
 created(){
-    this.code = {
-    "type": "object",
-    "title": "PhysicalPersonList",
-    "properties": {
-        "PhysicalPerson": {
-            "type": "array",
-            "properties": {
-                "items": [{
-                        "idnp": {
-                            "type": "string",
-                            "format": "idnp",
-                            "title": "Your identification number",
-                            "minLength": 13,
-                            "maxLength": 13,
-                            "validation": "required",
-                            "dataJsonPath": "$.properties.idnp"
-                        }
-                    },
-                    {
-                        "last_name": {
-                            "type": "string",
-                            "title": "Nume",
-                            "maxLength": 255,
-                            "validation": "required|alpha",
-                            "dataJsonPath": "$.properties.last_name"
-                        }
-                    },
-                    {
-                        "first_name": {
-                            "type": "string",
-                            "title": "Prenume",
-                            "maxLength": 255,
-                            "validation": "required|alpha",
-                            "dataJsonPath": "$.properties.first_name"
-                        }
-                    },
-                    {
-                        "patronymic": {
-                            "type": "string",
-                            "title": "Patronimic",
-                            "maxLength": 255,
-                            "validation": "required|alpha",
-                            "dataJsonPath": "$.properties.patronymic"
-                        }
-                    },
-                    {
-                        "debt_sum": {
-                            "type": "number",
-                            "title": "Suma datoriilor (MDL)",
-                            "maxLength": 255,
-                            "validation": "required|alpha",
-                            "dataJsonPath": "$.properties.relative"
-                        }
-                    }
-                ]
-            }
-        }
-    }
-}
+    this.code =  jsonSchema;
+    JsonPathGenerator.methods.generateJsonPath(this.code)
 },
   methods:{
       // Function to change curent language, on button click
@@ -153,17 +85,16 @@ created(){
       // Function that listen to any pressed key and update form builder view
     var $this = this;
       window.addEventListener('keyup', function(ev) {
+        JsonPathGenerator.methods.disposeAll()
         var jsonSchema = CodeEditor.methods.getEditorValue();
-        $this.formContent= FormBuilder.methods.getFormModel();
         if(!(jsonSchema instanceof Error)){
-            $this.code = jsonSchema
+            $this.code = jsonSchema;
+            let jsonPaths = JsonPathGenerator.methods.generateJsonPath($this.code)
+            console.log(jsonPaths);
+
         }
     });
   }
 }
 </script>
-<style>
-    html {
-      overflow-y: auto;
-    }
-</style>
+

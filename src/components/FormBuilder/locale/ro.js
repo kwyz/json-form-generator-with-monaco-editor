@@ -83,9 +83,7 @@ module.exports = function localize_ro(errors) {
                 out = 'Trebuie să se potrivească "' + (e.params.failingKeyword);
                 break;
             case 'maximum':
-                out = '';
-                var cond = e.params.comparison + " " + e.params.limit;
-                out += 'Trebuie să fie ' + (cond);
+                out = 'Nu poate depași ' + e.params.limit;
                 break;
             case 'maxItems':
                 out = '';
@@ -114,9 +112,7 @@ module.exports = function localize_ro(errors) {
                 }
                 break;
             case 'minimum':
-                out = '';
-                var cond = e.params.comparison + " " + e.params.limit;
-                out += 'Nu poate conține mai mic de ' + (cond);
+                out = 'Nu poate fi mai mic decât ' + e.params.limit;
                 break;
             case 'minItems':
                 out = '';

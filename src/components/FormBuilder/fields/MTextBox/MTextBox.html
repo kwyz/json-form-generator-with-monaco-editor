@@ -1,0 +1,10 @@
+<form>
+<div class="input-group mt-2 pr-2">
+        <input :id="schema.id" type="text" class="form-control ml-2 pl-2" :name="name" :placeholder="fieldTitle" :counter="schema.maxLength"
+            :maxlength="schema.maxLength" @click="findByPath()" :data-json-path="dataJsonPath" v-model="model" :required="required"
+            autocomplete="off">
+    </div>
+    <div class="text-left ml-2">
+        <small class="help-block text-danger" v-show="validationRules!=true">{{ validationRules }}</small>
+    </div>
+</form>

@@ -58,7 +58,8 @@ export default {
         raw: {
             type: String
         },
-        data: {}
+        data: {},
+        jsonPaths: Array,
     },
 
     data() {
@@ -96,7 +97,6 @@ export default {
             if (n > 1) return `${n} items`
             return n ? '1 item' : 'no items'
         },
-
         // Function that return the json path of curent selected row from json tree
         recursiveGetJsonPath(schema) {
             for (var index = 0; index < schema.value.length; index++) {
@@ -139,15 +139,14 @@ export default {
                 lineValue = lineValue.split(':');
                 if (oldElement != null && oldElement != undefined) {
                     oldElement.style.backgroundColor = "white"
-
                 }
-                var elems = document.getElementsByTagName('input')
-                for (var index = 0; index < elems.length; index++) {
+                var elements = document.getElementsByTagName('input')
+                for (var elementIndex = 0; elementIndex < elements.length; elementIndex++) {
                     if (lineValue[1] != undefined && lineValue[1] != null) {
                         lineValue[1] = lineValue[1].replace(/"/g, '').replace(/\s/g, '');
-                        if (elems[index].getAttribute('data-json-path') == lineValue[1]) {
-                            elems[index].style.backgroundColor = "rgb(190, 190, 190, 0.2)"
-                            oldElement = elems[index];
+                        if (elements[elementIndex].getAttribute('data-json-path') == lineValue[1]) {
+                            elements[elementIndex].style.backgroundColor = "rgb(190, 190, 190, 0.2)"
+                            oldElement = elements[elementIndex];
                         }
                     }
                 }
@@ -156,10 +155,10 @@ export default {
         // Function that scroll to the current selected element
         getElemet(value) {
             try {
-                var doc = document.getElementsByClassName("jsontreekey");
-                for (var i in doc) {
-                    if (i) {
-                        var child = doc[i];
+                var elements = document.getElementsByClassName("jsontreekey");
+                for (var elementIndex in elements) {
+                    if (elements[elementIndex]) {
+                        var child = elements[elementIndex];
                         if (child.textContent == value) {
                             child.scrollIntoView();
                             return child

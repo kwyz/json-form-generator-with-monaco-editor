@@ -2,6 +2,8 @@
 
     <span class="json-tree-row" v-if="parsed.primitive">
         <span class="json-tree-indent" v-if="parsed.key" v-for="n in (parsed.depth * 5 + 4)" :key="n">&nbsp;</span>
+        <span class="json-tree-indent" v-if="parsed.depth==1 && !parsed.key" v-for="n in (parsed.depth * 10 + 4)" :key="n">&nbsp;</span>
+
         <div color="success" small v-if="`${parsed.value}`">
             <img src="../../resources/obj.png" alt="properties-element" class="outline-image-obj ml-2">
             <span class="body-2 ml-2" @click="findByPath(parsed)" :title="`${parsed.value}`">{{ `${parsed.value}` }}</span>
@@ -13,30 +15,21 @@
             <div v-if="!parsed.key && parsed.depth=='0'">
                 <img src="../../resources/outline.png" class="outline-image ml-2" alt="root-element">
                 <span class="body-2 ml-2">ROOT</span>
-                <v-btn flat icon small @click="expanded = !expanded">
-                    <v-icon v-if="!expanded">keyboard_arrow_down
-                    </v-icon>
-                    <v-icon v-if="expanded">keyboard_arrow_up
-                    </v-icon>
-                </v-btn>
+                <button type="button" class="btn  btn-link btn-xs" @click="expanded = !expanded">
+                    <i class="material-icons" v-if="!expanded"> &#xe5c5;</i>
+                    <i class="material-icons" v-if="expanded">&#xe5c7;</i>
+                </button>
             </div>
             <span class="json-tree-indent" v-for="n in (parsed.depth * 5 + 4)" :key="n">&nbsp;</span>
-
             <div v-if="parsed.key">
                 <img src="../../resources/prop.png" class="outline-image-obj ml-2 " alt="object-element ">
                 <span class="body-2 ml-2 jsontreekey" @click="findByPath(parsed)">{{ parsed.key }}</span>
-                <v-btn flat icon small @click="expanded = !expanded">
-                    <v-icon v-if="!expanded ">keyboard_arrow_down
-                    </v-icon>
-                    <v-icon v-if="expanded ">keyboard_arrow_up
-                    </v-icon>
-                </v-btn>
+                <button type="button" class="btn btn-link btn-xs" @click="expanded = !expanded">
+                    <i class="material-icons" v-if="!expanded">&#xe5c5;</i>
+                    <i class="material-icons" v-if="expanded">&#xe5c7;</i>
+                </button>
             </div>
-
         </span>
-
-
-
         <span class="json-tree-deeper " v-show="expanded ">
             <json-tree v-for="(item, index) in parsed.value " :key="index " :kv="item "></json-tree>
         </span>

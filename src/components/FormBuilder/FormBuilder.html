@@ -1,22 +1,25 @@
-<v-flex id="form-builder">
-    <v-card v-if="schema.type == 'object'">
-        <v-card-title primary-title>
-            <v-flex xs12>
-                <h3>{{ schema.title }}</h3>
-
-                <template v-for="key in Object.keys(schema.properties) ">
+<div id="form-builder" class="col mt-2 " v-if="schema.type == 'object'">
+    <div class="card">
+        <div class="card-title">
+            <div class="text-center font-weight-bold mb-2">
+                {{getSchemaTitle}}
+            </div>
+            <div class="col-xs-12" :jp="getJsonPath()">
+                <template v-for="key in Object.keys(schema.properties)">
                     <div v-if="schema.properties[key].type=='array'">
-                        <div v-for="elem in schema.properties[key].properties.items">
-                            <component :is="getComponentName(Object.values(elem)[0])" :schema="Object.values(elem)[0]" :jsonPath="Object.values(elem)[0].dataJsonPath"
-                            />
+                        <div v-for="elem in schema.properties[key].items">
+                            <component :is="getComponentName(Object.values(elem)[0],key)" :name="key" :schema="Object.values(elem)[0]" />
                         </div>
                     </div>
-                    <div v-if="schema.properties[key].type!='array'">
-                        <component :is=" getComponentName(schema.properties[key]) " :schema="schema.properties[key]
-                        " :jsonPath="schema.properties[key].dataJsonPath " />
+                    <div v-if="schema.properties[key].type!='array' && schema.required">
+                        <component :is=" getComponentName(schema.properties[key], key)" :name="key" :schema="schema.properties[key]" :required='schema.required.includes(key)'
+                        />
+                    </div>
+                    <div v-if="schema.properties[key].type!='array' && !schema.required">
+                        <component :is="getComponentName(schema.properties[key],key)" :name="key" :schema="schema.properties[key]" />
                     </div>
                 </template>
-            </v-flex>
-        </v-card-title>
-    </v-card>
-</v-flex>
+            </div>
+        </div>
+    </div>
+</div>
