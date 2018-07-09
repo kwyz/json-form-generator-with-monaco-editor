@@ -12,17 +12,15 @@ export default {
     props: {
         schema: Object,
     },
-    data() {
-        return {
-            jsonPath: ""
-        };
-    },
+
     computed: {
         // Function that return some description text to 
         getSchemaTitle() {
+            this.getComponentName(this.schema);
             return this.schema.title || this.schema.description
-        }
+        },
     },
+
     methods: {
         // Function that get key type from json schema and return specific module for this type
         getComponentName(schema) {
@@ -44,9 +42,9 @@ export default {
             }
         },
         getJsonPath() {
-            var curentIndex = JsonPathGenerator.methods.getCurentLineIndex();
+            let curentIndex = JsonPathGenerator.methods.getCurentLineIndex();
             JsonPathGenerator.methods.pass();
-            var jsonPath = JsonPathGenerator.methods.getJsonPathAt(curentIndex);
+            let jsonPath = JsonPathGenerator.methods.getJsonPathAt(curentIndex);
             return jsonPath
         }
     }

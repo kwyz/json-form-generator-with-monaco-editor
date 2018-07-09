@@ -4,7 +4,7 @@
             <div class="text-center font-weight-bold mb-2">
                 {{getSchemaTitle}}
             </div>
-            <div class="col-xs-12" :jp="getJsonPath()">
+            <div class="col-xs-12" :jasonPath="getJsonPath()">
                 <template v-for="key in Object.keys(schema.properties)">
                     <div v-if="schema.properties[key].type=='array'">
                         <div v-for="elem in schema.properties[key].items">

@@ -68,7 +68,7 @@ export default {
         language: "json",
         currentLanguage:"ro",
         jsonPath:[],
-        code: {},
+        code: {}
     };    
 },
 created(){
@@ -89,10 +89,9 @@ created(){
         var jsonSchema = CodeEditor.methods.getEditorValue();
         if(!(jsonSchema instanceof Error)){
             $this.code = jsonSchema;
+            JsonPathGenerator.methods.generateJsonPath($this.code);
             let jsonPaths = JsonPathGenerator.methods.generateJsonPath($this.code)
-            console.log(jsonPaths);
-
-        }
+        }   
     });
   }
 }

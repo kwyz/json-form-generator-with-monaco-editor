@@ -21,7 +21,7 @@
                 </button>
             </div>
             <span class="json-tree-indent" v-for="n in (parsed.depth * 5 + 4)" :key="n">&nbsp;</span>
-            <div v-if="parsed.key">
+            <div v-if="parsed.key" class="outline-obj">
                 <img src="../../resources/prop.png" class="outline-image-obj ml-2 " alt="object-element ">
                 <span class="body-2 ml-2 jsontreekey" @click="findByPath(parsed)">{{ parsed.key }}</span>
                 <button type="button" class="btn btn-link btn-xs" @click="expanded = !expanded">

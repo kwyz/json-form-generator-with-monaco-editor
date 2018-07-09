@@ -8,18 +8,15 @@ export default {
     methods: {
         generateJsonPath: function (jsonSchema) {
             jsonSchemaJsonPathArray = [];
-            var path = stack.horizontal(jsonSchema);
-            for (var key in _.keys(path)) {
-                var keyValue = _.keys(path)[key];
+            let path = stack.horizontal(jsonSchema);
+            for (let key in _.keys(path)) {
+                let keyValue = _.keys(path)[key];
                 if (keyValue != "") {
-                    keyValue =
-                        "$." + keyValue.substring(0, keyValue.lastIndexOf("."));
+                    keyValue = "$." + keyValue.substring(0, keyValue.lastIndexOf("."));
                     if (!jsonSchemaJsonPathArray.includes(keyValue))
                         jsonSchemaJsonPathArray.push(keyValue);
                 }
             }
-            
-            console.log(jsonSchemaJsonPathArray);
             return jsonSchemaJsonPathArray;
         },
         pass() {
@@ -28,10 +25,21 @@ export default {
         getCurentLineIndex() {
             return lineIndex;
         },
+        getJsonPath() {
+            let curentIndex = this.getCurentLineIndex();
+            this.pass();
+            return this.getJsonPathAt(curentIndex);
+        },
         getJsonPathAt(lineIndex) {
-            var jsonPath = jsonSchemaJsonPathArray[lineIndex];
+            let jsonPath = jsonSchemaJsonPathArray[lineIndex];
             lineIndex++;
             return jsonPath;
+        },
+        getAllJsonPaths() {
+            return jsonSchemaJsonPathArray;
+        },
+        clearCount() {
+            lineIndex = 0;
         },
         disposeAll() {
             lineIndex = 0;

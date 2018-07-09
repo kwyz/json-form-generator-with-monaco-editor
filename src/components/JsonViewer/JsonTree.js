@@ -2,9 +2,11 @@ import CodeEditor from '../CodeEditor'
 import {
     isBoolean
 } from 'util';
+import JsonPathGenerator from '../JsonPathGenerator';
 
 var elementInstance;
 var oldElement;
+var elementCount = 0;
 
 function parse(data, depth = 0, last = true, key = undefined) {
     let kv = {
@@ -12,6 +14,15 @@ function parse(data, depth = 0, last = true, key = undefined) {
         last,
         primitive: true,
         key: JSON.stringify(key)
+    }
+    if ((typeof data === "object" || typeof data === "array") && data.type != "object") {
+        if (data.type != undefined) {
+            let jsonPath = JsonPathGenerator.methods.getJsonPathAt(elementCount);
+            Object.assign(kv, {
+                path: jsonPath
+            })
+        }
+        elementCount++;
     }
     if (typeof data !== 'object') {
         return Object.assign(kv, {
@@ -70,6 +81,8 @@ export default {
     },
     computed: {
         parsed() {
+            if (elementCount)
+                elementCount = 0;
             if (this.kv) {
                 return this.kv
             }
@@ -97,25 +110,10 @@ export default {
             if (n > 1) return `${n} items`
             return n ? '1 item' : 'no items'
         },
-        // Function that return the json path of curent selected row from json tree
-        recursiveGetJsonPath(schema) {
-            for (var index = 0; index < schema.value.length; index++) {
-                if (schema.value[index].value instanceof Array) {
-                    this.recursiveGetJsonPath(schema.value[index])
-                } else {
-                    if ((schema.value[index].value != undefined) && schema.value[index].value.includes("$")) {
-                        return schema.value[index].value
-                    }
-                }
-            }
-            return false;
-        },
         // Function that call method from CodeEditor module for searching the parent of curent json path
         findByPath(schema) {
-            var jsonPath = this.recursiveGetJsonPath(schema);
-            if (!isBoolean(jsonPath)) {
-                CodeEditor.methods.findByPath(jsonPath);
-            };
+            if (schema.path != undefined)
+                CodeEditor.methods.findByPath(schema.path);
         },
         // Function that highlight the current selected object from code editor in case if its find this line in json tree
         selectLineByValue(lineValue) {
@@ -125,9 +123,8 @@ export default {
                 }
                 if (lineValue != undefined && lineValue != null) {
                     lineValue = lineValue.replace('"dataJsonPath":', '').replace(/\s/g, '').split(".");
-                    for (var index = 1; index < lineValue.length; index++) {
-                        var value = '"' + lineValue[index].replace('"', '') + '"';
-                        elementInstance = this.getElemet(value)
+                    for (let index = 1; index < lineValue.length; index++) {
+                        elementInstance = this.getElemet(('"' + lineValue[index].replace('"', '') + '"'));
                     }
                     elementInstance.style.backgroundColor = "lightblue"
                 }
@@ -140,8 +137,8 @@ export default {
                 if (oldElement != null && oldElement != undefined) {
                     oldElement.style.backgroundColor = "white"
                 }
-                var elements = document.getElementsByTagName('input')
-                for (var elementIndex = 0; elementIndex < elements.length; elementIndex++) {
+                let elements = document.getElementsByTagName('input')
+                for (let elementIndex = 0; elementIndex < elements.length; elementIndex++) {
                     if (lineValue[1] != undefined && lineValue[1] != null) {
                         lineValue[1] = lineValue[1].replace(/"/g, '').replace(/\s/g, '');
                         if (elements[elementIndex].getAttribute('data-json-path') == lineValue[1]) {
@@ -155,10 +152,10 @@ export default {
         // Function that scroll to the current selected element
         getElemet(value) {
             try {
-                var elements = document.getElementsByClassName("jsontreekey");
-                for (var elementIndex in elements) {
+                let elements = document.getElementsByClassName("jsontreekey");
+                for (let elementIndex in elements) {
                     if (elements[elementIndex]) {
-                        var child = elements[elementIndex];
+                        let child = elements[elementIndex];
                         if (child.textContent == value) {
                             child.scrollIntoView();
                             return child

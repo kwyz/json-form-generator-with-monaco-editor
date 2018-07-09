@@ -1,6 +1,6 @@
 import rules from "../../validation/rules";
 import CodeEditor from '../../../CodeEditor'
-import FormBuilder from "../../FormBuilder";
+import JsonPathGenerator from '../../../JsonPathGenerator/index'
 export default {
     // Defautl properties for this module
     /**
@@ -10,7 +10,6 @@ export default {
     props: {
         name: String,
         schema: Object,
-        jsonPath: String,
         required: Boolean,
     },
     data() {
@@ -21,8 +20,7 @@ export default {
     computed: {
         // Function that return json path property from JSON schema
         dataJsonPath() {
-            var jsonPath = FormBuilder.methods.getJsonPath()
-            return jsonPath;
+            return JsonPathGenerator.methods.getJsonPath();
         },
         fieldTitle() {
             if (!this.schema.title) this.schema.title = this.name;

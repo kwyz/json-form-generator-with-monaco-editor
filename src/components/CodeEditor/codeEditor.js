@@ -23,7 +23,6 @@ function createMonacoEditor(editorOptions) {
             monacoEditorInstance.setValue("{}");
         }
     });
-
     //Asign event listner on changing cursor position in monaco editor, to get  parent of curent line
     monacoEditorInstance.onDidChangeCursorPosition(function (e) {
         try {
@@ -118,11 +117,10 @@ export default {
         findByPath(path) {
             let pathElements = path.split(".");
             pathElements.shift();
-            console.log(pathElements);
             if (!path) {
                 console.warn("Cannot find element. Add 'dataJsonPath' property in json schema. Ex. 'dataJsonPath':'$.obj_name'")
             } else {
-                let model = monacoEditorInstance.getValue();
+                var model = monacoEditorInstance.getValue();
                 let lastLineNumber = monacoEditorInstance.getModel().getLineCount();
                 for (let index = 0; index < pathElements.length; index++) {
                     model = monaco.editor.createModel(model);
@@ -135,43 +133,26 @@ export default {
                      * @param startColumnNumber { number } - end column number if serached item
                      */
                     if (matches.length != 0) {
-                        console.log(matches[0].range);
-
                         model = model.getValueInRange({
                             startLineNumber: matches[0].range.startLineNumber,
                             startColumn: matches[0].range.startColumn,
                             endLineNumber: lastLineNumber,
                             endColumn: 1
                         })
-                        console.log(model);
                     }
                 }
+                // Fiind in monaco editor this part of json schema
+                var matches = monacoEditorInstance.getModel().findMatches(model)
                 // Create new position object with parent position
-                // var position = {
-                //     column: matches[0].range.startColumn - 1,
-                //     lineNumber: parentPosition,
-                // }
-                //Set editor cursor on parent positon
-                // monacoEditorInstance.setPosition(position)
-                // monacoEditorInstance.revealPositionInCenter(position);
-            }
-        },
-        //Function that return parent position of received line number
-        /**
-         * @param editorContent { string } - entire editor content
-         * @param linePosition { integer } - curent line position
-         */
-        getParentPosition(editorContent, linePosition) {
-            var line = "";
-            var splitedText = editorContent.split("\n");
-            if (line != undefined && line != null) {
-                while (!(line.includes('{'))) {
-                    line = splitedText[linePosition - 2];
-                    linePosition--;
+                var position = {
+                    column: matches[0].range.startColumn - 1,
+                    lineNumber: matches[0].range.startLineNumber,
                 }
+                // Set editor cursor on parent positon
+                monacoEditorInstance.setPosition(position)
+                monacoEditorInstance.revealPositionInCenter(position);
+
             }
-            if (!(linePosition instanceof Error))
-                return linePosition;
         },
         // Function that get entire monaco editor value and return it in JSON format
         getEditorValue() {
