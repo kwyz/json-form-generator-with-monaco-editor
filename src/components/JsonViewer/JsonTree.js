@@ -1,7 +1,4 @@
 import CodeEditor from '../CodeEditor'
-import {
-    isBoolean
-} from 'util';
 import JsonPathGenerator from '../JsonPathGenerator';
 
 var elementInstance;
@@ -9,12 +6,8 @@ var oldElement;
 var elementCount = 0;
 
 function parse(data, depth = 0, last = true, key = undefined) {
-    let kv = {
-        depth,
-        last,
-        primitive: true,
-        key: JSON.stringify(key)
-    }
+    let kv = {depth, last, primitive: true, key: JSON.stringify(key)}
+    
     if ((typeof data === "object" || typeof data === "array") && data.type != "object") {
         if (data.type != undefined) {
             let jsonPath = JsonPathGenerator.methods.getJsonPathAt(elementCount);

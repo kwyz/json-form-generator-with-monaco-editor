@@ -2,7 +2,6 @@ import fileds from "./fields/"; // Import folder from project structure with all
 import FormBuilder from "../FormBuilder"; // Import itself for specific structure. Ex. object
 import JsonPathGenerator from '../JsonPathGenerator/index'
 
-
 export default {
     components: fileds,
     // Default property for curent model
@@ -12,40 +11,43 @@ export default {
     props: {
         schema: Object,
     },
-
+    data() {
+        return {
+            isNotChange: true
+        };
+    },
     computed: {
         // Function that return some description text to 
         getSchemaTitle() {
-            this.getComponentName(this.schema);
             return this.schema.title || this.schema.description
         },
     },
-
     methods: {
         // Function that get key type from json schema and return specific module for this type
         getComponentName(schema) {
-            if (!schema || !schema.type) return null;
-            switch (schema.type) {
-                case "string":
-                case "number":
-                case "integer":
-                    return "m-text-box";
-                case "boolean":
-                    return "m-check-box"
-                case "date-time":
-                    return "m-date-picker"
-                case "array":
-                    this.getComponentName(Object.values(schema)[0]);
-                    break;
-                case "object":
-                    return FormBuilder
+            try {
+                if (!schema || !schema.type) return null;
+                switch (schema.type) {
+                    case "string":
+                    case "number":
+                    case "integer":
+                        return "m-text-box";
+                    case "boolean":
+                        return "m-check-box"
+                    case "date-time":
+                        return "m-date-picker"
+                    case "array":
+                        this.getComponentName(Object.values(schema)[0]);
+                        break;
+                    case "object":
+                        return FormBuilder
+                }
+            }catch(e){
+
             }
         },
         getJsonPath() {
-            let curentIndex = JsonPathGenerator.methods.getCurentLineIndex();
-            JsonPathGenerator.methods.pass();
-            let jsonPath = JsonPathGenerator.methods.getJsonPathAt(curentIndex);
-            return jsonPath
+            return JsonPathGenerator.methods.getJsonPath();
         }
     }
 };

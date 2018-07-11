@@ -28,7 +28,7 @@
                             <json-viewer :data=code></json-viewer>
                         </div>
                         <div class="tab-pane fade" id="nav-form" role="tabpanel" aria-labelledby="nav-form-tab">
-                            <form-builder :schema=code></form-builder>
+                            <form-builder :v-if="isCanged()" :schema=code></form-builder>
                         </div>
                         <div class="tab-pane fade" id="nav-output" role="tabpanel" aria-labelledby="nav-output-tab">
                             <schema-output :schema=code></schema-output>
@@ -64,13 +64,14 @@ export default {
 
   data(){
       return {
-        hide: false,
+        show: true,
         language: "json",
         currentLanguage:"ro",
         jsonPath:[],
         code: {}
     };    
 },
+
 created(){
     this.code =  jsonSchema;
     JsonPathGenerator.methods.generateJsonPath(this.code)
@@ -80,20 +81,27 @@ created(){
     changeLanguage() {
         this.currentLanguage = rules.methods.getCurrentLanguage();
     },
+    isCanged(){
+        return this.show;
+    }
   },
   mounted(){
       // Function that listen to any pressed key and update form builder view
     var $this = this;
       window.addEventListener('keyup', function(ev) {
-        JsonPathGenerator.methods.disposeAll()
         var jsonSchema = CodeEditor.methods.getEditorValue();
-        if(!(jsonSchema instanceof Error)){
-            $this.code = jsonSchema;
-            JsonPathGenerator.methods.generateJsonPath($this.code);
-            let jsonPaths = JsonPathGenerator.methods.generateJsonPath($this.code)
+        $this.code = {}
+        $this.show = false;
+        Vue.nextTick(function () {
+            if(!(jsonSchema instanceof Error)){
+                $this.code = jsonSchema;
+                JsonPathGenerator.methods.disposeAll();
+                JsonPathGenerator.methods.generateJsonPath($this.code);
+                $this.show = true;
         }   
     });
+    });
+
   }
 }
 </script>
-

@@ -15,10 +15,9 @@ function createMonacoEditor(editorOptions) {
         column: 1,
         lineNumber: 1
     });
-
     //Assign event listner on changing monaco editor content
     monacoEditorInstance.onDidChangeModelContent(function (e) {
-        //If monaco editor contetn is empty, place in editor dual curly brackets, to avoid error on form generator
+        //If monaco editor content is empty, place in editor dual curly brackets, to avoid error on form generator
         if (monacoEditorInstance.getValue() == "") {
             monacoEditorInstance.setValue("{}");
         }
@@ -33,27 +32,12 @@ function createMonacoEditor(editorOptions) {
             if (lineNumber != undefined && lineNumber != null)
                 // Get entire line content 
                 lineValue = monacoEditorInstance.getModel().getLineContent(lineNumber);
-
-            //Search up to get parent 
-            while (!(lineValue.includes('{')) && !(lineValue.includes('dataJsonPath'))) {
-                lineNumber--;
-                if (lineNumber != undefined && lineNumber != null)
-                    lineValue = monacoEditorInstance.getModel().getLineContent(lineNumber)
-            }
-            //Search down to get parent
-            while (!(lineValue.includes('dataJsonPath'))) {
-                lineNumber++;
-                if (lineNumber != undefined && lineNumber != null)
-                    lineValue = monacoEditorInstance.getModel().getLineContent(lineNumber)
-            }
             //Return line value to other methods if value is not null or undefined
             if (lineValue != undefined && lineValue != null) {
                 JsonTree.methods.selectLineByValue(lineValue);
                 JsonTree.methods.selectField(lineValue);
             }
-        } catch (error) {
-
-        }
+        } catch (error) {}
     });
     // Return monaco editor instance 
     return monacoEditorInstance;
@@ -112,52 +96,73 @@ export default {
         this.editor = createMonacoEditor(editorOptions);
     },
     methods: {
-
         //Function that search an line in editor that correspond to selected element in form view or json-tree view
         findByPath(path) {
             let pathElements = path.split(".");
+            let key = '';
+            var lineCountBeforProp = 0;
             pathElements.shift();
-            if (!path) {
-                console.warn("Cannot find element. Add 'dataJsonPath' property in json schema. Ex. 'dataJsonPath':'$.obj_name'")
-            } else {
-                var model = monacoEditorInstance.getValue();
-                let lastLineNumber = monacoEditorInstance.getModel().getLineCount();
-                for (let index = 0; index < pathElements.length; index++) {
-                    model = monaco.editor.createModel(model);
-                    var matches = model.findMatches(pathElements[index]);
-                    /** matches is array of range object, that contains 4 properties
-                     * 
-                     * @param startLineNumber { number } - start line number of searched item
-                     * @param startColumnNumber { number } - start column number of serached item
-                     * @param endLineNumber { number } - end line number of searched item 
-                     * @param startColumnNumber { number } - end column number if serached item
-                     */
-                    if (matches.length != 0) {
-                        model = model.getValueInRange({
-                            startLineNumber: matches[0].range.startLineNumber,
-                            startColumn: matches[0].range.startColumn,
-                            endLineNumber: lastLineNumber,
-                            endColumn: 1
-                        })
-                    }
+            var model = monacoEditorInstance.getValue();
+            let lastLineNumber = monacoEditorInstance.getModel().getLineCount();
+            var matches = {};
+            for (let index = 0; index < pathElements.length; index++) {
+                model = monaco.editor.createModel(model);
+                matches = model.findMatches(pathElements[index]);
+                /** Matches is array of range object, that contains 4 properties
+                 * @param startLineNumber { number } - start line number of searched item
+                 * @param startColumnNumber { number } - start column number of serached item
+                 * @param endLineNumber { number } - end line number of searched item 
+                 * @param startColumnNumber { number } - end column number if serached item
+                 */
+                if (matches.length != 0) {
+                    model = model.getValueInRange({
+                        startLineNumber: matches[0].range.startLineNumber,
+                        startColumn: matches[0].range.startColumn,
+                        endLineNumber: lastLineNumber,
+                        endColumn: 1
+                    })
+                    if (lineCountBeforProp == 0)
+                        lineCountBeforProp = lastLineNumber - model.split('\n').length
                 }
-                // Fiind in monaco editor this part of json schema
-                var matches = monacoEditorInstance.getModel().findMatches(model)
-                // Create new position object with parent position
-                var position = {
-                    column: matches[0].range.startColumn - 1,
-                    lineNumber: matches[0].range.startLineNumber,
-                }
-                // Set editor cursor on parent positon
-                monacoEditorInstance.setPosition(position)
-                monacoEditorInstance.revealPositionInCenter(position);
-
+                key = pathElements[index]
             }
+            this.fiindExact(key, matches, lineCountBeforProp)
+        },
+        fiindExact(findKey, matches, lineCountBeforProp) {
+            var newModel = monaco.editor.createModel(monacoEditorInstance.getValue());
+            var modelValue = "";
+            var modelLineArray = [];
+            var lastLineNumber = monacoEditorInstance.getModel().getLineCount();
+            for (let i = 0; i < matches.length; i++) {
+                modelLineArray = modelValue.split('\n')
+                if (findKey != this.applyRegex(modelLineArray[0])) {
+                    modelValue = newModel.getValueInRange({
+                        startLineNumber: matches[i].range.startLineNumber + lineCountBeforProp,
+                        // Why +3 . I don't know, but it work.  MAGIC
+                        startColumn: matches[i].range.startColumn,
+                        endLineNumber: lastLineNumber,
+                        endColumn: 1
+                    })
+                } else
+                    break;
+            }
+            // Fiind in monaco editor this part of json schema
+            var newMatches = monacoEditorInstance.getModel().findMatches(modelValue)
+            // Create new position object with parent position
+            var position = {
+                column: newMatches[0].range.startColumn - 1,
+                lineNumber: newMatches[0].range.startLineNumber,
+            }
+            // Set editor cursor on parent positon
+            monacoEditorInstance.setPosition(position)
+            monacoEditorInstance.revealPositionInCenter(position);
+        },
+        applyRegex(key) {
+            return key.replace(/\s/g, '').replace(/\"/g, '').replace(/\{/g, '').replace(/\:/g, '')
         },
         // Function that get entire monaco editor value and return it in JSON format
         getEditorValue() {
             try {
-
                 JSON.parse(monacoEditorInstance.getValue())
             } catch (exception) {
                 return exception
