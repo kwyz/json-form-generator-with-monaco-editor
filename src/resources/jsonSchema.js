@@ -1,51 +1,126 @@
 export default {
+    "$id": "https://example.com/address.schema.json",
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "description": "A representation of a person, company, organization, or place",
     "type": "object",
-    "title": "PhysicalPersonList",
+    "required": [
+        "familyName",
+        "givenName"
+    ],
     "properties": {
-        "idnp": {
+        "fn": {
+            "description": "Formatted Name",
             "type": "string",
-            "format": "idnp",
-            "title": "Your identification number",
-            "minLength": 13,
-            "maxLength": 13
+            "title": "fn"
         },
-        "last_name": {
+        "familyName": {
             "type": "string",
-            "title": "Nume",
-            "maxLength": 255
+            "title": "familyName"
         },
-        "first_name": {
+        "givenName": {
             "type": "string",
-            "title": "Prenume",
-            "maxLength": 255,
-            "minLength": 13,
-            "maLength": 13,
-            "1": "number",
-            "2": "Suma datoriilor (MDL)",
-            "3": "number",
-            "4": "Suma datoriilor (MDL)",
-            "6": "number",
-            "5": "Suma datoriilor (MDL)",
-            "8": "number",
-            "9": "Suma datoriilor (MDL)"
+            "title": "givenName"
         },
-        "debt_summmmm": {
-            "type": "number",
-            "title": "Suma datoriilor (MDL)",
-            "maxLength": 255,
-            "minimum": 0,
-            "maximum": 150
+        "additionalName": {
+            "type": "array",
+            "items": {
+                "title": "hello world",
+                "type": "string"
+            }
         },
-        "debt_sum": {
-            "type": "number",
-            "title": "Suma datoriilor (MDL)",
-            "maxLength": 255,
-            "minimum": 0,
-            "maximum": 150
+        "honorificPrefix": {
+            "type": "array",
+            "items": {
+                "type": "string"
+            }
+        },
+        "honorificSuffix": {
+            "type": "array",
+            "items": {
+                "type": "string"
+            }
+        },
+        "nickname": {
+            "type": "string",
+            "title": "nickname"
+        },
+        "url": {
+            "type": "string",
+            "title": "url"
+        },
+        "email": {
+            "type": "object",
+            "properties": {
+                "type": {
+                    "type": "string",
+                    "title": "type"
+                },
+                "value": {
+                    "type": "string",
+                    "title": "value"
+                }
+            }
+        },
+        "tel": {
+            "type": "object",
+            "properties": {
+                "type": {
+                    "type": "string",
+                    "title": "type"
+                },
+                "value": {
+                    "type": "string",
+                    "title": "value"
+                }
+            }
+        },
+        "adr": {
+            "$ref": "http://example.com/address.schema.json"
+        },
+        "geo": {
+            "$ref": "http://example.com/geographical-location.schema.json"
+        },
+        "tz": {
+            "type": "string",
+            "title": "tz"
+        },
+        "photo": {
+            "type": "string",
+            "title": "photo"
+        },
+        "logo": {
+            "type": "string",
+            "title": "logo"
+        },
+        "sound": {
+            "type": "string",
+            "title": "sound"
+        },
+        "bday": {
+            "type": "string",
+            "title": "bday"
+        },
+        "title": {
+            "type": "string",
+            "title": "title"
+        },
+        "role": {
+            "type": "string",
+            "title": "role"
+        },
+        "org": {
+            "type": "object",
+            "properties": {
+                "organizationName": {
+                    "type": "string",
+                    "title": "organizationName"
+                },
+                "organizationUnit": {
+                    "type": "string",
+                    "title": "organizationUnit"
+                }
+            }
         }
     },
-    "required": [
-        "idnp",
-        "debt_sum"
-    ]
+    "title": "Misisng Schema"
 }

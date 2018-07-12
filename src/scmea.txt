@@ -36,21 +36,57 @@
             "type": "object",
             "title": "Suma datoriilor (MDL)",
             "properties": {
+                "IDNP": {
+                    "type": "string",
+                    "title": "Some text"
+                },
+                "idnpp": {
+                    "type": "string",
+                    "title": "Some text"
+                },
+                "idnp": {
+                    "type": "string",
+                    "title": "Some text"
+                }
+            }
+        },
+        "debt_summmmmm": {
+            "type": "object",
+            "title": "Suma datoriilor (MDL)",
+            "properties": {
                 "idnp": {
                     "type": "string",
                     "format": "idnp",
-                    "title": "Your identification number",
+                    "title": "Some text",
                     "minLength": 13,
                     "maxLength": 13
-                }
-            },
-            "required": [
-                "idnp"
-            ]
-        }
-    },
-    "required": [
-        "idnp",
-        "debt_sum"
-    ]
+                },
+                "debt_sum": {
+                    "type": "object",
+                    "title": "Suma datoriilor (MDL)",
+                    "properties": {
+                        "IDNP": {
+                            "type": "string",
+                            "title": "Some text"
+                        },
+                        "idnpp": {
+                            "type": "string",
+                            "title": "Some text"
+                        },
+                        "idnp": {
+                            "type": "string",
+                            "title": "Some text"
+                        }
+                    }
+                },
+                "required": [
+                    "idnp"
+                ]
+            }
+        },
+        "required": [
+            "idnp",
+            "debt_sum"
+        ]
+    }
 }

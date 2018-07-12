@@ -19,7 +19,7 @@ export default {
     computed: {
         // Function that return some description text to 
         getSchemaTitle() {
-            return this.schema.title || this.schema.description
+            return this.schema.title || this.schema.description || this.schema.type 
         },
     },
     methods: {
@@ -37,12 +37,10 @@ export default {
                     case "date-time":
                         return "m-date-picker"
                     case "array":
-                        this.getComponentName(Object.values(schema)[0]);
-                        break;
                     case "object":
                         return FormBuilder
                 }
-            }catch(e){
+            } catch (e) {
 
             }
         },

@@ -2,14 +2,19 @@
     <div class="card">
         <div class="card-title">
             <div class="text-center font-weight-bold mb-2">
+                {{getSchemaTitle}}
+            </div>
+            <div class="text-center font-weight-bold mb-2">
             </div>
             <div class="col-xs-12" :jasonPath="getJsonPath()">
                 <div v-if="schema.properties">
                     <template v-for="key in Object.keys(schema.properties)">
-                        <div v-if="schema.properties[key].type=='array'">
-                            <div v-for="elem in schema.properties[key].items">
-                                <component :is="getComponentName(Object.values(elem)[0],key)" :name="key" :schema="Object.values(elem)[0]" />
-                            </div>
+                        <div v-if="schema.properties[key].type=='array' && !schema.required">
+                            <component :is="getComponentName(schema.properties[key].items,key)" :name="key" :schema="schema.properties[key].items" />
+                        </div>
+                        <div v-if="schema.properties[key].type=='array' &&  schema.required">
+                            <component :is="getComponentName(schema.properties[key].items,key)" :name="key" :schema="schema.properties[key].items" :required='schema.required.includes(key)'
+                            />
                         </div>
                         <div v-if="schema.properties[key].type!='array' && schema.required">
                             <component :is="getComponentName(schema.properties[key], key)" :name="key" :schema="schema.properties[key]" :required='schema.required.includes(key)'
