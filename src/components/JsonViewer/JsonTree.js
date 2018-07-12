@@ -3,19 +3,24 @@ import JsonPathGenerator from '../JsonPathGenerator';
 
 var elementInstance;
 var oldElement;
-var elementCount = 0;
+var elementCount = 1;
 
 function parse(data, depth = 0, last = true, key = undefined) {
-    let kv = {depth, last, primitive: true, key: JSON.stringify(key)}
-    
-    if ((typeof data === "object" || typeof data === "array") && data.type != "object") {
+    let kv = {
+        depth,
+        last,
+        primitive: true,
+        key: key
+    }
+
+    if ((typeof data === "object" || typeof data === "array") && kv.type != "object" && kv.key != "items" && kv.key != "properties") {
         if (data.type != undefined) {
             let jsonPath = JsonPathGenerator.methods.getJsonPathAt(elementCount);
             Object.assign(kv, {
                 path: jsonPath
             })
+            elementCount++;
         }
-        elementCount++;
     }
     if (typeof data !== 'object') {
         return Object.assign(kv, {

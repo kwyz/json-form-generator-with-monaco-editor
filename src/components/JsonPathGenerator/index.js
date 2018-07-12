@@ -10,11 +10,14 @@ export default {
             jsonSchemaJsonPathArray = [];
             let path = stack.horizontal(jsonSchema);
             for (let key in _.keys(path)) {
+
                 let keyValue = _.keys(path)[key];
-                if (keyValue != "" && !keyValue.includes('required') && !keyValue.includes('items') && keyValue.includes("type")) {
+                if (keyValue != "" && !keyValue.includes('required') && !keyValue.includes('items')&& keyValue.includes('type')) {
+
                     keyValue = "$." + keyValue.substring(0, keyValue.lastIndexOf("."));
-                    if (!jsonSchemaJsonPathArray.includes(keyValue))
+                    if (!jsonSchemaJsonPathArray.includes(keyValue)) {
                         jsonSchemaJsonPathArray.push(keyValue);
+                    }
                 }
             }
             return jsonSchemaJsonPathArray;

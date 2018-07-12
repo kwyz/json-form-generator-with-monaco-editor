@@ -96,7 +96,7 @@ created(){
             if(!(jsonSchema instanceof Error)){
                 $this.code = jsonSchema;
                 JsonPathGenerator.methods.disposeAll();
-                JsonPathGenerator.methods.generateJsonPath($this.code);
+                JsonPathGenerator.methods.generateJsonPath(jsonSchema);
                 $this.show = true;
         }   
     });
