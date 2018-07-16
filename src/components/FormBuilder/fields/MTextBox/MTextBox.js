@@ -1,6 +1,7 @@
 import rules from "../../validation/rules";
 import CodeEditor from '../../../CodeEditor'
 import JsonPathGenerator from '../../../JsonPathGenerator/index'
+import FormBuilder from "../../FormBuilder";
 export default {
     // Defautl properties for this module
     /**
@@ -12,6 +13,11 @@ export default {
         schema: Object,
         required: Boolean,
     },
+    watch: {
+        model() {
+            model = this.model;
+        }
+    },
     data() {
         return {
             model: "",
@@ -20,6 +26,7 @@ export default {
     computed: {
         // Function that return json path property from JSON schema
         dataJsonPath() {
+            
             return JsonPathGenerator.methods.getJsonPath();
         },
         fieldTitle() {
@@ -35,6 +42,6 @@ export default {
         //Function that call another function to find parent element in monaco editor for current json path
         findByPath() {
             CodeEditor.methods.findByPath(this.dataJsonPath);
-        },
+        }
     }
 };

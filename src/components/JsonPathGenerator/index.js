@@ -13,7 +13,6 @@ export default {
 
                 let keyValue = _.keys(path)[key];
                 if (keyValue != "" && !keyValue.includes('required') && !keyValue.includes('items')&& keyValue.includes('type')) {
-
                     keyValue = "$." + keyValue.substring(0, keyValue.lastIndexOf("."));
                     if (!jsonSchemaJsonPathArray.includes(keyValue)) {
                         jsonSchemaJsonPathArray.push(keyValue);

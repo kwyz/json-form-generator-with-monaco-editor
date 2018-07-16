@@ -1,92 +1,126 @@
 {
+    "$id": "https://example.com/address.schema.json",
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "description": "A representation of a person, company, organization, or place",
     "type": "object",
-    "title": "PhysicalPersonList",
+    "required": [
+        "familyName",
+        "givenName"
+    ],
     "properties": {
-        "idnp": {
+        "fn": {
+            "description": "Formatted Name",
             "type": "string",
-            "format": "idnp",
-            "title": "Your identification number",
-            "minLength": 13,
-            "maxLength": 13
+            "title": "fn"
         },
-        "last_name": {
+        "familyName": {
             "type": "string",
-            "title": "Nume",
-            "maxLength": 255
+            "title": "familyName"
         },
-        "first_name": {
+        "givenName": {
             "type": "string",
-            "title": "Prenume",
-            "maxLength": 255
+            "title": "givenName"
         },
-        "object": {
+        "additionalName": {
+            "type": "array",
+            "items": {
+                "title": "hello world",
+                "type": "string"
+            }
+        },
+        "honorificPrefix": {
+            "type": "array",
+            "items": {
+                "type": "string"
+            }
+        },
+        "honorificSuffix": {
+            "type": "array",
+            "items": {
+                "type": "string"
+            }
+        },
+        "nickname": {
+            "type": "string",
+            "title": "nickname"
+        },
+        "url": {
+            "type": "string",
+            "title": "url"
+        },
+        "email": {
             "type": "object",
-            "title": "Object",
             "properties": {
-                "idnp": {
+                "type": {
                     "type": "string",
-                    "format": "idnp",
-                    "title": "Your identification number",
-                    "minLength": 13,
-                    "maxLength": 13
+                    "title": "type"
+                },
+                "value": {
+                    "type": "string",
+                    "title": "value"
                 }
             }
         },
-        "debt_sum": {
+        "tel": {
             "type": "object",
-            "title": "Suma datoriilor (MDL)",
             "properties": {
-                "IDNP": {
+                "type": {
                     "type": "string",
-                    "title": "Some text"
+                    "title": "type"
                 },
-                "idnpp": {
+                "value": {
                     "type": "string",
-                    "title": "Some text"
-                },
-                "idnp": {
-                    "type": "string",
-                    "title": "Some text"
+                    "title": "value"
                 }
             }
         },
-        "debt_summmmmm": {
-            "type": "object",
-            "title": "Suma datoriilor (MDL)",
-            "properties": {
-                "idnp": {
-                    "type": "string",
-                    "format": "idnp",
-                    "title": "Some text",
-                    "minLength": 13,
-                    "maxLength": 13
-                },
-                "debt_sum": {
-                    "type": "object",
-                    "title": "Suma datoriilor (MDL)",
-                    "properties": {
-                        "IDNP": {
-                            "type": "string",
-                            "title": "Some text"
-                        },
-                        "idnpp": {
-                            "type": "string",
-                            "title": "Some text"
-                        },
-                        "idnp": {
-                            "type": "string",
-                            "title": "Some text"
-                        }
-                    }
-                },
-                "required": [
-                    "idnp"
-                ]
-            }
+        "adr": {
+            "$ref": "http://example.com/address.schema.json"
         },
-        "required": [
-            "idnp",
-            "debt_sum"
-        ]
-    }
+        "geo": {
+            "$ref": "http://example.com/geographical-location.schema.json"
+        },
+        "tz": {
+            "type": "string",
+            "title": "tz"
+        },
+        "photo": {
+            "type": "string",
+            "title": "photo"
+        },
+        "logo": {
+            "type": "string",
+            "title": "logo"
+        },
+        "sound": {
+            "type": "string",
+            "title": "sound"
+        },
+        "bday": {
+            "type": "string",
+            "title": "bday"
+        },
+        "title": {
+            "type": "string",
+            "title": "title"
+        },
+        "role": {
+            "type": "string",
+            "title": "role"
+        },
+        "org": {
+            "type": "object",
+            "properties": {
+                "organizationName": {
+                    "type": "string",
+                    "title": "organizationName"
+                },
+                "organizationUnit": {
+                    "type": "string",
+                    "title": "organizationUnit"
+                }
+            }
+        }
+    },
+    "title": "Misisng Schema"
 }

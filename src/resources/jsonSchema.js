@@ -1,126 +1,119 @@
 export default {
-    "$id": "https://example.com/address.schema.json",
-    "$schema": "http://json-schema.org/draft-07/schema#",
-    "description": "A representation of a person, company, organization, or place",
     "type": "object",
-    "required": [
-        "familyName",
-        "givenName"
-    ],
+    "title": "$",
     "properties": {
-        "fn": {
-            "description": "Formatted Name",
+        "idnp": {
             "type": "string",
-            "title": "fn"
+            "format": "idnp",
+            "title": "properties.idnp",
+            "minLength": 13,
+            "maxLength": 13
         },
-        "familyName": {
+        "last_name": {
             "type": "string",
-            "title": "familyName"
+            "title": "properties.last_name",
+            "maxLength": 255
         },
-        "givenName": {
+        "first_name": {
             "type": "string",
-            "title": "givenName"
+            "title": "properties.last_name",
+            "maxLength": 255
         },
-        "additionalName": {
-            "type": "array",
-            "items": {
-                "title": "hello world",
-                "type": "string"
-            }
-        },
-        "honorificPrefix": {
-            "type": "array",
-            "items": {
-                "type": "string"
-            }
-        },
-        "honorificSuffix": {
-            "type": "array",
-            "items": {
-                "type": "string"
-            }
-        },
-        "nickname": {
-            "type": "string",
-            "title": "nickname"
-        },
-        "url": {
-            "type": "string",
-            "title": "url"
-        },
-        "email": {
+        "object": {
             "type": "object",
+            "title": "$.properties.object",
             "properties": {
-                "type": {
+                "idnp": {
                     "type": "string",
-                    "title": "type"
-                },
-                "value": {
-                    "type": "string",
-                    "title": "value"
+                    "format": "idnp",
+                    "title": "properties.idnp",
+                    "minLength": 13,
+                    "maxLength": 13
                 }
             }
         },
-        "tel": {
+        "debt_sum_1": {
             "type": "object",
+            "title": "$.properties.debt_sum_1",
             "properties": {
-                "type": {
+                "IDNP": {
                     "type": "string",
-                    "title": "type"
+                    "title": "properties.IDNP"
                 },
-                "value": {
+                "idnpp": {
                     "type": "string",
-                    "title": "value"
+                    "title": "properties.idnpp"
+                },
+                "idnp": {
+                    "type": "string",
+                    "title": "properties.idnp"
+                },
+                "additionalName": {
+                    "type": "array",
+                    "items": {
+                        "title": "properties.additionalName",
+                        "type": "string"
+                    }
+                },
+                "honorificPrefix": {
+                    "type": "array",
+                    "items": {
+                        "type": "string",
+                        "title": "properties.honorificPrefix"
+                    }
+                },
+                "honorificSuffix": {
+                    "type": "array",
+                    "items": {
+                        "type": "string",
+                        "title": "properties.honorificSuffix"
+                    }
                 }
-            }
+            },
+            "required": [
+                "idnp",
+                "IDNP",
+                "honorificPrefix"
+            ]
         },
-        "adr": {
-            "$ref": "http://example.com/address.schema.json"
-        },
-        "geo": {
-            "$ref": "http://example.com/geographical-location.schema.json"
-        },
-        "tz": {
-            "type": "string",
-            "title": "tz"
-        },
-        "photo": {
-            "type": "string",
-            "title": "photo"
-        },
-        "logo": {
-            "type": "string",
-            "title": "logo"
-        },
-        "sound": {
-            "type": "string",
-            "title": "sound"
-        },
-        "bday": {
-            "type": "string",
-            "title": "bday"
-        },
-        "title": {
-            "type": "string",
-            "title": "title"
-        },
-        "role": {
-            "type": "string",
-            "title": "role"
-        },
-        "org": {
+        "debt_sum_2": {
             "type": "object",
+            "title": "$.properties.debt_sum_2",
             "properties": {
-                "organizationName": {
+                "idnp": {
                     "type": "string",
-                    "title": "organizationName"
+                    "format": "idnp",
+                    "title": "peorperties.idnp",
+                    "minLength": 13,
+                    "maxLength": 13
                 },
-                "organizationUnit": {
-                    "type": "string",
-                    "title": "organizationUnit"
+                "debt_sum": {
+                    "type": "object",
+                    "title": "$.properties.debt_sum.properties.debt_sum",
+                    "properties": {
+                        "IDNP": {
+                            "type": "string",
+                            "title": "properties.IDNP"
+                        },
+                        "idnpp": {
+                            "type": "string",
+                            "title": "properties.idnpp"
+                        },
+                        "idnp": {
+                            "type": "string",
+                            "title": "properties.idnp"
+                        }
+                    },
+                    "required": [
+                        "idnp",
+                        "IDNP"
+                    ]
                 }
             }
         }
     },
-    "title": "Misisng Schema"
+    "required": [
+        "idnp",
+        "first_name"
+    ]
 }

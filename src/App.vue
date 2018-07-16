@@ -28,7 +28,7 @@
                             <json-viewer :data=code></json-viewer>
                         </div>
                         <div class="tab-pane fade" id="nav-form" role="tabpanel" aria-labelledby="nav-form-tab">
-                            <form-builder :v-if="isCanged()" :schema=code></form-builder>
+                            <form-builder :schema=code :model=fieldsModels></form-builder>
                         </div>
                         <div class="tab-pane fade" id="nav-output" role="tabpanel" aria-labelledby="nav-output-tab">
                             <schema-output :schema=code></schema-output>
@@ -64,11 +64,11 @@ export default {
 
   data(){
       return {
-        show: true,
         language: "json",
         currentLanguage:"ro",
         jsonPath:[],
-        code: {}
+        code: {},
+        fieldsModels: []
     };    
 },
 
@@ -81,27 +81,23 @@ created(){
     changeLanguage() {
         this.currentLanguage = rules.methods.getCurrentLanguage();
     },
-    isCanged(){
-        return this.show;
-    }
   },
   mounted(){
       // Function that listen to any pressed key and update form builder view
     var $this = this;
       window.addEventListener('keyup', function(ev) {
         var jsonSchema = CodeEditor.methods.getEditorValue();
-        $this.code = {}
-        $this.show = false;
-        Vue.nextTick(function () {
-            if(!(jsonSchema instanceof Error)){
-                $this.code = jsonSchema;
-                JsonPathGenerator.methods.disposeAll();
-                JsonPathGenerator.methods.generateJsonPath(jsonSchema);
-                $this.show = true;
-        }   
+        if(JSON.stringify(jsonSchema) !=JSON.stringify($this.code)){
+            $this.code = {}
+            Vue.nextTick(function () {
+                if(!(jsonSchema instanceof Error)){
+                    $this.code = jsonSchema;
+                    JsonPathGenerator.methods.disposeAll();
+                    JsonPathGenerator.methods.generateJsonPath(jsonSchema);
+                }   
+            });
+        }
     });
-    });
-
   }
 }
 </script>

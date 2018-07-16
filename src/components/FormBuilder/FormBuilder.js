@@ -2,6 +2,7 @@ import fileds from "./fields/"; // Import folder from project structure with all
 import FormBuilder from "../FormBuilder"; // Import itself for specific structure. Ex. object
 import JsonPathGenerator from '../JsonPathGenerator/index'
 
+var fieldsModelsArray = [];
 export default {
     components: fileds,
     // Default property for curent model
@@ -10,17 +11,18 @@ export default {
      */
     props: {
         schema: Object,
-    },
-    data() {
-        return {
-            isNotChange: true
-        };
+        model: Array
     },
     computed: {
         // Function that return some description text to 
         getSchemaTitle() {
-            return this.schema.title || this.schema.description || this.schema.type 
+            return this.schema.title || this.schema.description || this.schema.type
         },
+        getFieldModel() {
+            let fieldModel = this.model[0]
+            this.model.shift();
+            return fieldModel;
+        }
     },
     methods: {
         // Function that get key type from json schema and return specific module for this type
