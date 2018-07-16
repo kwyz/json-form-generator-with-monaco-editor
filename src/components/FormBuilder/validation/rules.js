@@ -22,12 +22,14 @@ ajv.addFormat('idnp', function (data) {
 String.prototype.capitalize = function () {
     return this.charAt(0).toUpperCase() + this.slice(1);
 }
+var requiredErrorMessage = "Acest câmp este obligatoriu! "
+
 
 export default {
     methods: {
         // Function that is designed for return and validation error messages for curent site language
         getComponentValidator: function (schema, data, isRequired) {
-            if (isRequired && data == "") return "*Acest câmp este obligatoriu!"
+            if (isRequired && data == "") return requiredErrorMessage;
             if (!schema || !schema.type || data == "") return true;
             if ((schema.type == "number" || schema.type == "integer") && !isNaN(parseInt(data)))
                 data = parseInt(data);
@@ -55,12 +57,15 @@ export default {
             switch (currentLanguage) {
                 case "ro":
                     currentLanguage = "en"
+                    requiredErrorMessage = "This field is required"
                     break;
                 case "en":
                     currentLanguage = "ru"
+                    requiredErrorMessage = "Это обязательное поле"
                     break;
                 case "ru":
                     currentLanguage = "ro"
+                    requiredErrorMessage = "Acest câmp este obligatoriu"
                     break;
             }
             return currentLanguage;

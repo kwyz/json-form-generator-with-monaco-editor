@@ -80,7 +80,17 @@ created(){
   methods:{
       // Function to change curent language, on button click
     changeLanguage() {
+        var $this = this;
+        var jsonSchema = CodeEditor.methods.getEditorValue();
         this.currentLanguage = rules.methods.getCurrentLanguage();
+            $this.code = {}
+            Vue.nextTick(function () {
+                if(!(jsonSchema instanceof Error)){
+                    $this.code = jsonSchema;
+                    JsonPathGenerator.methods.disposeAll();
+                    JsonPathGenerator.methods.generateJsonPath(jsonSchema);
+                }   
+            });
     },
   },
   mounted(){
