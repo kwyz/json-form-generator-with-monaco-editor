@@ -27,8 +27,9 @@
                         <div class="tab-pane fade show active" id="nav-code" role="tabpanel" aria-labelledby="nav-code-tab">
                             <json-viewer :data=code></json-viewer>
                         </div>
-                        <div class="tab-pane fade" id="nav-form" role="tabpanel" aria-labelledby="nav-form-tab">
+                        <div class="tab-pane fade text-center" id="nav-form" role="tabpanel" aria-labelledby="nav-form-tab">
                             <form-builder :schema=code :model=fieldsModels></form-builder>
+                            <button type="button" class="btn btn-success mt-2">Submit</button>
                         </div>
                         <div class="tab-pane fade" id="nav-output" role="tabpanel" aria-labelledby="nav-output-tab">
                             <schema-output :schema=code></schema-output>

@@ -69,12 +69,7 @@ export default {
                         "title": "properties.honorificSuffix"
                     }
                 }
-            },
-            "required": [
-                "idnp",
-                "IDNP",
-                "honorificPrefix"
-            ]
+            }
         },
         "debt_sum_2": {
             "type": "object",
@@ -103,17 +98,9 @@ export default {
                             "type": "string",
                             "title": "properties.idnp"
                         }
-                    },
-                    "required": [
-                        "idnp",
-                        "IDNP"
-                    ]
+                    }
                 }
             }
         }
-    },
-    "required": [
-        "idnp",
-        "first_name"
-    ]
+    }
 }

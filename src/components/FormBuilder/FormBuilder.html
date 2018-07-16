@@ -1,27 +1,25 @@
-<div id="form-builder" class="col mt-2 " v-if="schema.type == 'object'">
-    <div class="card">
+<div id="form-builder" class="col mt-1" v-if="schema.type == 'object'">
+    <div class="card shadow-sm">
         <div class="card-title">
             <div class="text-center font-weight-bold mb-2">
                 {{getSchemaTitle}}
             </div>
-            <div class="text-center font-weight-bold mb-2">
-            </div>
             <div class="col-xs-12" :jasonPath="getJsonPath()">
                 <div v-if="schema.properties">
                     <template v-for="key in Object.keys(schema.properties)">
-                        <div v-if="schema.properties[key].type=='array' && !schema.required">
-                            <component :is="getComponentName(schema.properties[key].items,key)" :name="key" :schema="schema.properties[key].items" />
+                        <div v-if="schema.properties[key].type=='array'">
+                            <component 
+                            :is="getComponentName(schema.properties[key].items,key)" 
+                            :name="key" 
+                            :schema="schema.properties[key].items" 
+                            :required='(schema.required && schema.required.length > 0 )? schema.required.includes(key) : null'/>
                         </div>
-                        <div v-if="schema.properties[key].type=='array' &&  schema.required">
-                            <component :is="getComponentName(schema.properties[key].items,key)" :name="key" :schema="schema.properties[key].items" :required='schema.required.includes(key)'
-                            />
-                        </div>
-                        <div v-if="schema.properties[key].type!='array' && schema.required">
-                            <component :is="getComponentName(schema.properties[key], key)" :name="key" :schema="schema.properties[key]" :required='schema.required.includes(key)'
-                            />
-                        </div>
-                        <div v-if="schema.properties[key].type!='array' && !schema.required">
-                            <component :is="getComponentName(schema.properties[key],key)" :name="key" :schema="schema.properties[key]" />
+                        <div v-if="schema.properties[key].type!='array'">
+                            <component
+                            :is="getComponentName(schema.properties[key], key)"
+                            :name="key" 
+                            :schema="schema.properties[key]" 
+                            :required='(schema.required && schema.required.length > 0 ) ? schema.required.includes(key) : null'/>
                         </div>
                     </template>
                 </div>
