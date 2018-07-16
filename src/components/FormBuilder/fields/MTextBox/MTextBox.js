@@ -1,7 +1,6 @@
 import rules from "../../validation/rules";
 import CodeEditor from '../../../CodeEditor'
 import JsonPathGenerator from '../../../JsonPathGenerator/index'
-import FormBuilder from "../../FormBuilder";
 export default {
     // Defautl properties for this module
     /**
@@ -12,11 +11,6 @@ export default {
         name: String,
         schema: Object,
         required: Boolean,
-    },
-    watch: {
-        model() {
-            model = this.model;
-        }
     },
     data() {
         return {

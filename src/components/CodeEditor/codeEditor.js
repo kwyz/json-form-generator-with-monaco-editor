@@ -1,5 +1,4 @@
 import * as monaco from "@timkendrick/monaco-editor";
-import JsonTree from "../JsonViewer";
 
 //Global monaco editor instance
 var monacoEditorInstance;
@@ -17,7 +16,7 @@ function createMonacoEditor(editorOptions) {
         lineNumber: 1
     });
     //Assign event listner on changing monaco editor content
-    monacoEditorInstance.onDidChangeModelContent(function(e) {
+    monacoEditorInstance.onDidChangeModelContent(function (e) {
         //If monaco editor content is empty, place in editor dual curly brackets, to avoid error on form generator
         if (monacoEditorInstance.getValue() == "") {
             monacoEditorInstance.setValue("{}");
@@ -50,7 +49,7 @@ export default {
             baseUrl: "node_modules/@timkendrick/monaco-editor/dist/external"
         };
         // Add event listner to window, that is triggered on window resize, and change monaco editor layout
-        window.addEventListener("resize", function() {
+        window.addEventListener("resize", function () {
             calcMonacoEditorWidth();
             monacoEditorInstance.layout({
                 width: calcMonacoEditorWidth(),
@@ -63,6 +62,9 @@ export default {
          * @param folding - capability to fold language contructions
          * @param theme - monaco editor visual apperance (black or white)
          * @param scrollBeyondLastLine - remove empty space after last line
+         * @param formatOnPaste - auto format text on paste 
+         * @param formatOnType - auto format text on typeing 
+         * @param minimap - set minimap enabled to false, to remove code 
          */
         var editorOptions = {
             value: JSON.stringify(this.code, null, 4),
@@ -85,6 +87,7 @@ export default {
         //Function that search an line in editor that correspond to selected element in form view or json-tree view
         findByPath(path) {
             let pathElements = path.split(".");
+            // Remove first ('$') element from pathElements
             pathElements.shift();
             if (!path) {
                 console.warn(
@@ -103,29 +106,20 @@ export default {
                         pathElements[index]
                     );
                     /** matches is array of range object, that contains 4 properties
-                     *
-                     * @param startLineNumber { number } - start line number of searched item
-                     * @param startColumnNumber { number } - start column number of serached item
-                     * @param endLineNumber { number } - end line number of searched item
-                     * @param startColumnNumber { number } - end column number if serached item
+                     * @param startLineNumber { integer } - start line number of searched item
+                     * @param startColumnNumber { integer } - start column number of serached item
+                     * @param endLineNumber { integerer } - end line number of searched item
+                     * @param startColumnNumber { integer } - end column number of serached item
                      */
-
                     if (matches.length != 0) {
-                        for (
-                            let keyIndex = 0;
-                            keyIndex < matches.length;
-                            keyIndex++
-                        ) {
+                        for (let keyIndex = 0; keyIndex < matches.length; keyIndex++) {
                             let key = modelInstance.getLineContent(
                                 matches[keyIndex].range.startLineNumber
                             );
-                            key = this.applyRegex(key);
                             if (pathElements[index] == this.applyRegex(key)) {
                                 modelValue = modelInstance.getValueInRange({
-                                    startLineNumber:
-                                        matches[keyIndex].range.startLineNumber,
-                                    startColumn:
-                                        matches[keyIndex].range.startColumn,
+                                    startLineNumber: matches[keyIndex].range.startLineNumber,
+                                    startColumn: matches[keyIndex].range.startColumn,
                                     endLineNumber: lastLineNumber,
                                     endColumn: 1
                                 });
