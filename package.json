@@ -23,7 +23,7 @@
         "module": "^1.2.5",
         "monaco-editor": "^0.13.1",
         "monaco-editor-webpack-plugin": "^1.4.0",
-        "node-sass": "^4.9.2",
+        "node-sass": "^4.11.0",
         "sass-loader": "^7.0.3",
         "source-map-support": "^0.5.6",
         "vee-validate": "^2.1.0-beta.6",
